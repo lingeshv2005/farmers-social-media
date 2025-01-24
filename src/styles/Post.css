@@ -6,12 +6,10 @@
   
   body,
   html {
-    height: 100%;
-    margin: 0;
     display: flex;
     justify-content: center;
-    align-items: flex-start;
     padding-top: 53px;
+    background-color: rgb(84, 142, 111);
   }
   
   .post {
@@ -21,7 +19,7 @@
     margin-bottom: 20px;
     background-color: #ffffff;
     border-radius: 8px;
-    box-shadow: 10px 0px 5px gray, -10px 0px 5px gray;
+    /* box-shadow: 10px 0px 5px gray, -10px 0px 5px lightgray; */
   }
   
   .header {

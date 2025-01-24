@@ -1,13 +1,20 @@
-import Navbar from './components/Navbar'
-import Post from './components/Post'
-import './styles/Navbar.css'
-import './styles/Post.css'
+import Login from './components/Login';
+import Signup from './components/SignUp';
+import Navbar from './Navbar'
+import './Navbar.css'
+import '../src/styles/Base.css'
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 function App() {
   return (
     <>
       <Navbar />
-      <Post />
+      <Router>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />}/>
+        </Routes>
+      </Router>
     </>
   )
 }

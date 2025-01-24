@@ -5,7 +5,7 @@ nav {
   left: 0;
   width: 100%; /* Full width */
   z-index: 1000; /* Ensure it stays above other elements */
-  background-color: #ffffff; /* Light background for light mode */
+  background-color: #9cd17e; /* Light background for light mode */
   border-bottom: 1px solid #d1d5db; /* Light gray border */
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
   display: flex;
