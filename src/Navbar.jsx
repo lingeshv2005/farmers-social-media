@@ -63,9 +63,9 @@ const Navbar= ()=>{
                     </div>
                 </nav>
                 <Routes>
-                    <Route path="/profile-dashboard" element={<ProfileDashboard userDetails={userDetails} userPost={userPost}/>} />
                     <Route path="/" element={<Post />} />
-                    <Route path="/health-posts" element={<HealthPost />} />
+                    <Route path="/profile-dashboard" element={<ProfileDashboard userDetails={userDetails} userPost={userPost}/>} />
+                    <Route path="/health-posts" element={<HealthPost userDetails={userDetails}/>} />
                 </Routes>
             </Router>
     );
