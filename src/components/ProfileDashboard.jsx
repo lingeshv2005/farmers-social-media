@@ -8,49 +8,21 @@ import { useState } from "react";
 import "../styles/ProfileDashboard.css";
 import "../styles/Post.css";
 
-const ProfileDashboard = () => {
+const ProfileDashboard = ({userDetails={},userPost={}}) => {
   const data = {
+    ...userDetails,
     profileBackgroundImage: img1,
     profilePicture: img4,
-    username: "johnDoe",
-    bio: "I am a Farmer",
-    userType: "farmer",
-    location: "Nigeria",
-    followers: "1M",
   };
 
-  const posts = [
-    {
-      postId: "1001",
-      postContent: "🌟 Consistency in problem-solving!",
-      imageURL: img2,
-      totalLikes: "10k",
-      totalComments: "50",
-    },
-    {
-      postId: "1002",
-      postContent: "💻 Tackled 250+ problems on LeetCode!",
-      imageURL: img3,
-      totalLikes: "12k",
-      totalComments: "60",
-    },
-    {
-      postId: "1003",
-      postContent: "📚 Explored 60+ problems on GeeksforGeeks.",
-      imageURL: img4,
-      totalLikes: "15k",
-      totalComments: "80",
-    },
-  ];
+  const posts = [userPost];
 
   const [currentIndex, setCurrentIndex] = useState(0);
-
   const handleNext = () => {
     setCurrentIndex((prevIndex) => {
       return prevIndex === posts.length - 1 ? 0 : prevIndex + 1;
     });
   };
-
   const handlePrev = () => {
     setCurrentIndex((prevIndex) => {
       return prevIndex === 0 ? posts.length - 1 : prevIndex - 1;
@@ -69,14 +41,53 @@ const ProfileDashboard = () => {
         alt="User profile"
         className="profile-picture"
       />
-      <h1>{data.username}</h1>
+      <h1>{data.name}</h1>
+      <p>@{data.username}</p>
       <p>{data.bio}</p>
       <p>{data.userType}</p>
       <p>{data.location}</p>
-      <p>{data.followers} Followers</p>
+      <p>1M Followers</p>
+
+      <h2>Animal Types</h2>
+      <ul>
+        {data.animalTypes.map((animal) => (
+          <li key={animal._id}>
+            {animal.animalName}: {animal.total}
+          </li>
+        ))}
+      </ul>
+
+      <h2>Contact Information</h2>
+      <p>Email: {data.email}</p>
+
+      <h2>Social Media</h2>
+      <p>
+        <a href={data.facebook} target="_blank" rel="noopener noreferrer">
+          Facebook
+        </a>
+      </p>
+      <p>
+        <a href={data.instagram} target="_blank" rel="noopener noreferrer">
+          Instagram
+        </a>
+      </p>
+      <p>
+        <a href={data.twitter} target="_blank" rel="noopener noreferrer">
+          Twitter
+        </a>
+      </p>
+      <p>
+        <a href={data.website} target="_blank" rel="noopener noreferrer">
+          Website
+        </a>
+      </p>
+
+      <h2>Account Status</h2>
+      <p>Verification Status: {data.verificationStatus? <span className="verified-badge">✔</span> : "Not Verified"}</p>
 
       <div className="activity-container">
         <h2>Recent Activity</h2>
+        <button className="add-new" onClick={createPost}>New Post</button>
         <div className="content">
           <div className="header">
             <img
@@ -90,21 +101,23 @@ const ProfileDashboard = () => {
               <div className="time">Just now</div>
             </div>
           </div>
-          <div className="content">{posts[currentIndex].postContent}</div>
+          <div className="content">{posts[currentIndex].post.content}</div>
           <img
-            src={posts[currentIndex].imageURL}
+            src={img3}
             alt={`Post ${currentIndex + 1}`}
             className="content-img"
           />
           <div className="actions-container1">
-            <span>{posts[currentIndex].totalLikes} Likes</span>
-            <span>{posts[currentIndex].totalComments} Comments</span>
+            <span>{posts[currentIndex].post.likeCount} Likes</span>
+            <span>{posts[currentIndex].post.commentCount} Comments</span>
+            <span>{posts[currentIndex].post.repostCount} Reposts</span>
           </div>
         </div>
         <div className="actions-container2">
           <button className="action-btn">👍 Like</button>
           <button className="action-btn">💬 Comment</button>
           <button className="action-btn">🔗 Share</button>
+          <button className="action-btn">🔁 Repost</button>
         </div>
         <div className="carousel-buttons">
           <button onClick={handlePrev} className="prev-btn">
@@ -118,5 +131,10 @@ const ProfileDashboard = () => {
     </div>
   );
 };
+
+
+const createPost =async ()=>{
+
+}
 
 export default ProfileDashboard;

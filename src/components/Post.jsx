@@ -30,10 +30,12 @@ const Post=(()=>{
                 <span>{user.totalLikes} Likes</span>
                 <span>{user.totalComments} Comments</span>
             </div>
-            <div class="actions-container2">
-                <button class="action-btn">👍 Like</button>
-                <button class="action-btn">💬 Comment</button>
-                <button class="action-btn">🔗 Share</button>
+            <div className="actions-container2">
+                <button className="action-btn">👍 Like</button>
+                <button className="action-btn">💬 Comment</button>
+                <button className="action-btn">🔗 Share</button>
+                <button className="action-btn">🔁 Repost</button>
+
             </div>
             </div> 
             ))}
