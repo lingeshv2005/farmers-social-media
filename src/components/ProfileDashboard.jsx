@@ -7,6 +7,7 @@ import { useState } from "react";
 
 import "../styles/ProfileDashboard.css";
 import "../styles/Post.css";
+import CreatePostBox from "./CreatePostBox";
 
 const ProfileDashboard = ({userDetails={},userPost={}}) => {
   const data = {
@@ -18,6 +19,8 @@ const ProfileDashboard = ({userDetails={},userPost={}}) => {
   const posts = [userPost];
 
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [showCreatePostBox, setSowCreatePostBox] = useState(false);
+
   const handleNext = () => {
     setCurrentIndex((prevIndex) => {
       return prevIndex === posts.length - 1 ? 0 : prevIndex + 1;
@@ -87,7 +90,8 @@ const ProfileDashboard = ({userDetails={},userPost={}}) => {
 
       <div className="activity-container">
         <h2>Recent Activity</h2>
-        <button className="add-new" onClick={createPost}>New Post</button>
+        <button className="add-new" onClick={()=>setSowCreatePostBox(true)}>New Post</button>
+        {showCreatePostBox && <CreatePostBox onClose={()=>setSowCreatePostBox(false)} />}
         <div className="content">
           <div className="header">
             <img
@@ -132,9 +136,5 @@ const ProfileDashboard = ({userDetails={},userPost={}}) => {
   );
 };
 
-
-const createPost =async ()=>{
-
-}
 
 export default ProfileDashboard;

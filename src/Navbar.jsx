@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
-import { BrowserRouter as Router, Routes, Route, Link, useParams } from "react-router-dom";
+import { BrowserRouter , Routes, Route, Link, useParams } from "react-router-dom";
 
 import logo from "../src/assets/farmdoc.svg";
 
 import Post from "./components/Post";
 import ProfileDashboard from "./components/ProfileDashboard";
-import HealthPost from './components/HealthPost';
 
 
 
@@ -45,7 +44,7 @@ const Navbar= ()=>{
     if(loading) return <div>Loading...</div>
 
         return(
-            <Router>
+            <BrowserRouter>
                 <nav className="nav-bar">
                     <img src={logo} alt="Farmdoc Logo" className="navbar-logo"/>
                     <span>FarmDoc</span>
@@ -65,12 +64,17 @@ const Navbar= ()=>{
                 <Routes>
                     <Route path="/" element={<Post />} />
                     <Route path="/profile-dashboard" element={<ProfileDashboard userDetails={userDetails} userPost={userPost}/>} />
-                    <Route path="/health-posts" element={<HealthPost userDetails={userDetails}/>} />
+                    {/* <Route path="/health-posts" element={<HealthPost userDetails={userDetails}/>} />
+                    <Route path="/farm-updates" element={<FarmUpdates userDetails={userDetails}/>} /> */}
                 </Routes>
-            </Router>
+            </BrowserRouter>
     );
 }
 
+// layout route
+// main layout
+// outlet
+// query params
 
 
 export default Navbar;
