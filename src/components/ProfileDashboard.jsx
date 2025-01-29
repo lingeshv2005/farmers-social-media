@@ -9,14 +9,15 @@ import "../styles/ProfileDashboard.css";
 import "../styles/Post.css";
 import CreatePostBox from "./CreatePostBox";
 
-const ProfileDashboard = ({userDetails={},userPost={}}) => {
+const ProfileDashboard = ({userDetails={},userPostById=[]}) => {
   const data = {
     ...userDetails,
     profileBackgroundImage: img1,
     profilePicture: img4,
   };
-
-  const posts = [userPost];
+  console.log(userPostById);
+  const posts = userPostById.posts;
+  console.log(posts[0]);
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showCreatePostBox, setSowCreatePostBox] = useState(false);
@@ -92,6 +93,8 @@ const ProfileDashboard = ({userDetails={},userPost={}}) => {
         <h2>Recent Activity</h2>
         <button className="add-new" onClick={()=>setSowCreatePostBox(true)}>New Post</button>
         {showCreatePostBox && <CreatePostBox onClose={()=>setSowCreatePostBox(false)} />}
+
+        {posts.length>0 ? (
         <div className="content">
           <div className="header">
             <img
@@ -105,18 +108,21 @@ const ProfileDashboard = ({userDetails={},userPost={}}) => {
               <div className="time">Just now</div>
             </div>
           </div>
-          <div className="content">{posts[currentIndex].post.content}</div>
+          <div className="content">{posts[currentIndex].content}</div>
           <img
             src={img3}
             alt={`Post ${currentIndex + 1}`}
             className="content-img"
           />
           <div className="actions-container1">
-            <span>{posts[currentIndex].post.likeCount} Likes</span>
-            <span>{posts[currentIndex].post.commentCount} Comments</span>
-            <span>{posts[currentIndex].post.repostCount} Reposts</span>
+            <span>{posts[currentIndex]?.likeCount} Likes</span>
+            <span>{posts[currentIndex]?.commentCount} Comments</span>
+            <span>{posts[currentIndex]?.repostCount} Reposts</span>
           </div>
         </div>
+        ):(
+          <p>No posts yet!</p>
+        )}
         <div className="actions-container2">
           <button className="action-btn">👍 Like</button>
           <button className="action-btn">💬 Comment</button>

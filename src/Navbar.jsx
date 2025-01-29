@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useDebugValue } from 'react';
 import axios from "axios";
 import { BrowserRouter , Routes, Route, Link, useParams } from "react-router-dom";
 
@@ -11,34 +11,33 @@ import ProfileDashboard from "./components/ProfileDashboard";
 
 const Navbar= ()=>{
     const [userDetails, setUserDetails] =useState(null);
-    const [userPost, setUserPost] =useState(null);
+    const [posts, setPosts] =useState(null);
+    const [userPostById, setUserPostById] =useState(null);
     const [loading, setLoading] =useState(true);
 
     useEffect(()=>{
-        const fetchUserData =async ()=>{
+        const fetchData =async ()=>{
             try{
-                const response=await axios.get("https://farmers-social-media-backend.onrender.com/api/getuserdetails/e280e321-6a19-4f76-900e-92345ae1c6e9"); 
-                console.log(response.data);
-                setUserDetails(response.data);
-                setLoading(false);
+                const userDataResponse=await axios.get("https://farmers-social-media-backend.onrender.com/api/getuserdetails/e280e321-6a19-4f76-900e-92345ae1c6e9"); 
+                console.log(userDataResponse.data);
+                setUserDetails(userDataResponse.data);
+
+                const postsResponse=await axios.get("http://localhost:3001/api/getposts"); 
+                console.log(postsResponse.data);
+                setPosts(postsResponse.data);
+
+                const userPostsResponse=await axios.get("http://localhost:3001/api/getpost/user/e280e321-6a19-4f76-900e-92345ae1c6e9"); 
+                console.log(userPostsResponse.data);
+                setUserPostById(userPostsResponse.data);
+
             }catch(err){
                 console.log(err);
                 setLoading(false);
-            }
-        };
-        const fetchPost =async ()=>{
-            try{
-                const response=await axios.get("https://farmers-social-media-backend.onrender.com/api/getpost/3701d9c1-f52f-4326-bdb2-566f33356b6e"); 
-                console.log(response.data);
-                setUserPost(response.data);
-                setLoading(false);
-            }catch(err){
-                console.log(err);
+            }finally{
                 setLoading(false);
             }
         };
-        fetchPost();
-        fetchUserData();
+        fetchData();
     },[]);
 
     if(loading) return <div>Loading...</div>
@@ -62,8 +61,8 @@ const Navbar= ()=>{
                     </div>
                 </nav>
                 <Routes>
-                    <Route path="/" element={<Post />} />
-                    <Route path="/profile-dashboard" element={<ProfileDashboard userDetails={userDetails} userPost={userPost}/>} />
+                    <Route path="/" element={<Post userDetails={userDetails} posts={posts}/>} />
+                    <Route path="/profile-dashboard" element={<ProfileDashboard userDetails={userDetails} userPostById={userPostById}/>} />
                     {/* <Route path="/health-posts" element={<HealthPost userDetails={userDetails}/>} />
                     <Route path="/farm-updates" element={<FarmUpdates userDetails={userDetails}/>} /> */}
                 </Routes>
