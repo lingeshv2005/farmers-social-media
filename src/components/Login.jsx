@@ -1,14 +1,18 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 import '../styles/Login.css';
 
 function Login({ setIsAuthenticated }) {
   const [formData, setFormData] = useState({
-    email: '',
+    username: '',
     password: '',
   });
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);  // loading state for button
+  const [showPassword, setShowPassword] = useState(false); // to toggle password visibility
+  const navigate = useNavigate();  // hook for navigation
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,16 +25,34 @@ function Login({ setIsAuthenticated }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);  // show loading indicator
+
     try {
-      // TODO: Implement actual login logic here
+      const response = await axios.get('https://farmers-social-media-backend.onrender.com/api/login', {
+        params:{
+          username: formData.username,
+          password: formData.password
+        }
+      });
+      const { token } = response.data;
+
+      // Store the token (you can use localStorage, cookies, or state)
+      localStorage.setItem('authToken', token);
+
+      // Update authentication state
       setIsAuthenticated(true);
+
+      // Redirect to home page
+      navigate('/home');
     } catch (err) {
-      setError(err.message || 'Login failed. Please try again.');
+      setError(err.response?.data?.message || 'Login failed. Please try again.');
+    } finally {
+      setLoading(false);  // hide loading indicator after the request
     }
   };
 
   return (
-    <div >
+    <div className="login-container">
       <div className="login-box">
         <h1 className="login-title">Welcome Back!</h1>
         <p className="login-subtitle">Connect with farmers and share your experiences</p>
@@ -38,22 +60,22 @@ function Login({ setIsAuthenticated }) {
         <form className="login-form" onSubmit={handleSubmit}>
           {error && <div className="error-message">{error}</div>}
           
-          <div className="input-group">
+          <div className="login-input-group">
             <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
+              type="text"
+              id="username"
+              name="username"
+              value={formData.username}
               onChange={handleChange}
               required
               placeholder=" "
             />
-            <label htmlFor="email">Email</label>
+            <label htmlFor="username">Username</label>
           </div>
 
-          <div className="input-group">
+          <div className="login-input-group">
             <input
-              type="password"
+              type={showPassword ? 'text' : 'password'}  // Toggle password visibility
               id="password"
               name="password"
               value={formData.password}
@@ -62,6 +84,13 @@ function Login({ setIsAuthenticated }) {
               placeholder=" "
             />
             <label htmlFor="password">Password</label>
+            <button
+              type="button"
+              onClick={() => setShowPassword(prev => !prev)}
+              className="password-toggle"
+            >
+              {showPassword ? 'Hide' : 'Show'}
+            </button>
           </div>
 
           <div className="form-footer">
@@ -74,8 +103,8 @@ function Login({ setIsAuthenticated }) {
             </Link>
           </div>
 
-          <button type="submit" className="login-btn">
-            Login
+          <button type="submit" className="login-btn" disabled={loading}>
+            {loading ? 'Logging in...' : 'Login'}  {/* Show loading state text */}
             <span className="btn-shine"></span>
           </button>
         </form>

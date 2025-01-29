@@ -1,20 +1,17 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import '../styles/SignUp.css';
 
-function SignUp({ setIsAuthenticated }) {
+function SignUp() {
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
+    username: '',
     password: '',
-    confirmPassword: '',
-    phone: '',
-    location: '',
-    avatar: null,
+    confirmPassword: ''
   });
   const [error, setError] = useState('');
-  const [avatarPreview, setAvatarPreview] = useState('');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const navigate = useNavigate(); 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,32 +22,23 @@ function SignUp({ setIsAuthenticated }) {
     setError('');
   };
 
-  const handleAvatarChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setFormData(prev => ({
-        ...prev,
-        avatar: file
-      }));
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setAvatarPreview(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
       return;
     }
+
     try {
-      // TODO: Implement actual signup logic here
+      await axios.post('https://farmers-social-media-backend.onrender.com/api/signup', {
+        username: formData.username,
+        password: formData.password
+      });
       setIsAuthenticated(true);
+      navigate('/home'); 
+
     } catch (err) {
-      setError(err.message || 'Signup failed. Please try again.');
+      setError(err.response?.data?.message || 'Signup failed. Please try again.');
     }
   };
 
@@ -62,44 +50,18 @@ function SignUp({ setIsAuthenticated }) {
         
         <form className="signup-form" onSubmit={handleSubmit}>
           {error && <div className="error-message">{error}</div>}
-          
-          <div className="signup-input-group">
-            <input
-              type="text"
-              id="firstName"
-              name="firstName"
-              value={formData.firstName}
-              onChange={handleChange}
-              required
-              placeholder=" "
-            />
-            <label htmlFor="firstName">First Name</label>
-          </div>
-
-          <div className="signup-input-group">
-            <input
-              type="text"
-              id="lastName"
-              name="lastName"
-              value={formData.lastName}
-              onChange={handleChange}
-              required
-              placeholder=" "
-            />
-            <label htmlFor="lastName">Last Name</label>
-          </div>
-
+        
           <div className="signup-input-group full-width">
             <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
+              type="text"
+              id="username"
+              name="username"
+              value={formData.username}
               onChange={handleChange}
               required
               placeholder=" "
             />
-            <label htmlFor="email">Email</label>
+            <label htmlFor="username">Username</label>
           </div>
 
           <div className="signup-input-group">
@@ -128,53 +90,6 @@ function SignUp({ setIsAuthenticated }) {
             <label htmlFor="confirmPassword">Confirm Password</label>
           </div>
 
-          <div className="signup-input-group">
-            <input
-              type="tel"
-              id="phone"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              required
-              placeholder=" "
-            />
-            <label htmlFor="phone">Phone Number</label>
-          </div>
-
-          <div className="signup-input-group">
-            <input
-              type="text"
-              id="location"
-              name="location"
-              value={formData.location}
-              onChange={handleChange}
-              required
-              placeholder=" "
-            />
-            <label htmlFor="location">Location</label>
-          </div>
-
-          <div className="avatar-upload">
-            <div className="avatar-preview">
-              {avatarPreview ? (
-                <img src={avatarPreview} alt="Avatar preview" />
-              ) : (
-                <div className="avatar-placeholder"></div>
-              )}
-            </div>
-            <label className="avatar-upload-btn" htmlFor="avatar">
-              {avatarPreview ? 'Change Avatar' : 'Upload Avatar'}
-              <input
-                type="file"
-                id="avatar"
-                name="avatar"
-                onChange={handleAvatarChange}
-                accept="image/*"
-                style={{ display: 'none' }}
-              />
-            </label>
-          </div>
-
           <button type="submit" className="signup-btn">
             Create Account
             <span className="btn-shine"></span>
@@ -184,7 +99,7 @@ function SignUp({ setIsAuthenticated }) {
         <div className="signup-footer">
           <p>
             Already have an account?{' '}
-            <Link to="/login">Login</Link>
+            <Link to="/">Login</Link>
           </p>
         </div>
       </div>
