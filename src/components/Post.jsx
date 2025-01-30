@@ -9,6 +9,7 @@ const Post=(({posts=[],userDetails={}})=>{
     const data=posts.posts;
     console.log(posts);
     console.log(userDetails);
+    
     return(
         <>
             {data.map((post,index)=>(

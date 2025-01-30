@@ -45,6 +45,7 @@ const ProfileDashboard = ({userDetails={},userPostById=[]}) => {
         alt="User profile"
         className="profile-picture"
       />
+      
       <h1>{data.name}</h1>
       <p>@{data.username}</p>
       <p>{data.bio}</p>
@@ -92,7 +93,9 @@ const ProfileDashboard = ({userDetails={},userPostById=[]}) => {
       <div className="activity-container">
         <h2>Recent Activity</h2>
         <button className="add-new" onClick={()=>setSowCreatePostBox(true)}>New Post</button>
-        {showCreatePostBox && <CreatePostBox onClose={()=>setSowCreatePostBox(false)} />}
+        {showCreatePostBox && (
+          <CreatePostBox userDetails={userDetails} onClose={() => setSowCreatePostBox(false)} />
+        )}
 
         {posts.length>0 ? (
         <div className="content">

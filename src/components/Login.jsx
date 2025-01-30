@@ -4,15 +4,16 @@ import axios from 'axios';
 
 import '../styles/Login.css';
 
-function Login({ setIsAuthenticated }) {
+function Login() {
   const [formData, setFormData] = useState({
     username: '',
     password: '',
   });
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);  // loading state for button
-  const [showPassword, setShowPassword] = useState(false); // to toggle password visibility
-  const navigate = useNavigate();  // hook for navigation
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
+  const [isAuth, setIsAuth] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,28 +27,28 @@ function Login({ setIsAuthenticated }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);  // show loading indicator
-
+    console.log(formData);
     try {
+
       const response = await axios.get('https://farmers-social-media-backend.onrender.com/api/login', {
         params:{
           username: formData.username,
           password: formData.password
         }
       });
-      const { token } = response.data;
+      const { token,userId } = response.data;
 
-      // Store the token (you can use localStorage, cookies, or state)
       localStorage.setItem('authToken', token);
+      localStorage.setItem('userId', userId);
+      localStorage.setItem('username', username);
+      localStorage.setItem('isAuth',true);
 
-      // Update authentication state
-      setIsAuthenticated(true);
-
-      // Redirect to home page
       navigate('/home');
     } catch (err) {
+      console.log(err);
       setError(err.response?.data?.message || 'Login failed. Please try again.');
     } finally {
-      setLoading(false);  // hide loading indicator after the request
+      setLoading(false);
     }
   };
 
@@ -104,7 +105,7 @@ function Login({ setIsAuthenticated }) {
           </div>
 
           <button type="submit" className="login-btn" disabled={loading}>
-            {loading ? 'Logging in...' : 'Login'}  {/* Show loading state text */}
+            {loading ? 'Logging in...' : 'Login'}  
             <span className="btn-shine"></span>
           </button>
         </form>

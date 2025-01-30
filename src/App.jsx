@@ -3,13 +3,13 @@ import Signup from './components/SignUp';
 import Navbar from './Navbar'
 import './Navbar.css'
 import '../src/styles/Base.css'
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 
 function App() {
   return (
     <>
-      <Navbar />
+      {localStorage.getItem('isAuth') && <Navbar />}
       <Router>
         <Routes>
           <Route path="/" element={<Login />} />

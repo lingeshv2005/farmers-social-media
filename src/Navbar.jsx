@@ -13,35 +13,42 @@ const Navbar= ()=>{
     const [userDetails, setUserDetails] =useState(null);
     const [posts, setPosts] =useState(null);
     const [userPostById, setUserPostById] =useState(null);
-    const [loading, setLoading] =useState(true);
+    const [loading, setLoading] =useState(false);
 
-    useEffect(()=>{
+    useEffect(()=>{ 
+
         const fetchData =async ()=>{
-            try{
-                const userDataResponse=await axios.get("https://farmers-social-media-backend.onrender.com/api/getuserdetails/e280e321-6a19-4f76-900e-92345ae1c6e9"); 
-                console.log(userDataResponse.data);
-                setUserDetails(userDataResponse.data);
+                try{
+                    setLoading(true);
+                    const data = localStorage.getItem("userId");
+                    const userDataResponse=await axios.get(`https://farmers-social-media-backend.onrender.com/api/getuserdetails/${data}`); 
+                    console.log(userDataResponse.data);
+                    setUserDetails(userDataResponse.data);
+                    // localStorage.setItem("userDataResponse",userDataResponse);
 
-                const postsResponse=await axios.get("https://farmers-social-media-backend.onrender.com/api/getposts"); 
-                console.log(postsResponse.data);
-                setPosts(postsResponse.data);
+                    const postsResponse=await axios.get("https://farmers-social-media-backend.onrender.com/api/getposts"); 
+                    console.log(postsResponse.data);
+                    setPosts(postsResponse.data);
+                    // localStorage.setItem("postsResponse",postsResponse);
 
-                const userPostsResponse=await axios.get("https://farmers-social-media-backend.onrender.com/api/getpost/user/e280e321-6a19-4f76-900e-92345ae1c6e9"); 
-                console.log(userPostsResponse.data);
-                setUserPostById(userPostsResponse.data);
+                    const userPostsResponse=await axios.get(`https://farmers-social-media-backend.onrender.com/api/getpost/user/${data}`); 
+                    console.log(userPostsResponse.data);
+                    setUserPostById(userPostsResponse.data);
+                    // localStorage.setItem("userPostsResponse",userPostsResponse);
 
-            }catch(err){
-                console.log(err);
-                setLoading(false);
-            }finally{
-                setLoading(false);
-            }
-        };
-        fetchData();
-    },[]);
+                    }catch(err){
+                        console.log(err);
+                        setLoading(false);
+                    }finally{
+                        setLoading(false);
+                    }
+                }
+                
+                fetchData();
+            
+            },[]);
 
-    if(loading) return <div>Loading...</div>
-
+        if(loading) return <div>Loading...</div>
         return(
             <BrowserRouter>
                 <nav className="nav-bar">
@@ -50,12 +57,12 @@ const Navbar= ()=>{
                     <div className="nav-links">
                         <ul>
                             <li><Link to="/home">Home</Link></li>
-                            <li><Link to="/health-posts">Health Posts</Link></li>
+                            {/* <li><Link to="/health-posts">Health Posts</Link></li> */}
                             <li><Link to="/profile-dashboard">Profile</Link></li>
-                            <li><Link to="/farm-updates">Farm Updates</Link></li>
+                            {/* <li><Link to="/farm-updates">Farm Updates</Link></li>
                             <li><Link to="/community">Community</Link></li>
                             <li><Link to="/marketplace">Marketplace</Link></li>
-                            <li><Link to="/events">Events</Link></li>
+                            <li><Link to="/events">Events</Link></li> */}
                             <li><Link to="/notifications">Notifications</Link></li>
                         </ul>
                     </div>
@@ -77,3 +84,6 @@ const Navbar= ()=>{
 
 
 export default Navbar;
+
+
+// lingesh1    21fd35d9-aa25-44d9-812a-face5e1ed5d6

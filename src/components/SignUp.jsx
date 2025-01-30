@@ -10,7 +10,7 @@ function SignUp() {
     confirmPassword: ''
   });
   const [error, setError] = useState('');
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuth, setIsAuth] = useState(false);
   const navigate = useNavigate(); 
 
   const handleChange = (e) => {
@@ -34,7 +34,9 @@ function SignUp() {
         username: formData.username,
         password: formData.password
       });
-      setIsAuthenticated(true);
+      setIsAuth(true);
+      localStorage.setItem('isAuth',true);
+      
       navigate('/home'); 
 
     } catch (err) {

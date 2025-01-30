@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import axios from "axios";
 import "../styles/CreatePostBox.css";
 
-const NewPostModal =({onClose, userDetails})=>{
+const NewPostModal =({ userDetails, onClose})=>{
   const [tags,setTags] = useState([]);
   const [postType, setPostType] = useState("farmUpdate");
   const [content, setContent] = useState("");
@@ -144,11 +144,11 @@ const NewPostModal =({onClose, userDetails})=>{
 }
 
 
-const CreatePostBox=({userDetails})=>{
+const CreatePostBox=({userDetails, onClose})=>{
 
   return(
     <div>
-      <NewPostModal  userDetails={userDetails}/>
+      <NewPostModal  userDetails={userDetails} onClose={onClose}/>
     </div>
   )
 }
