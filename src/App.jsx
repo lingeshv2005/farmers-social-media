@@ -9,7 +9,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 function App() {
   return (
     <>
-      {localStorage.getItem('isAuth') && <Navbar />}
+      <Navbar />
       <Router>
         <Routes>
           <Route path="/" element={<Login />} />
