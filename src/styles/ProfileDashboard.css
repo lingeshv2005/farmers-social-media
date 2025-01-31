@@ -91,25 +91,49 @@
 .carousel-buttons {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin-top: 15px;
+  width: 100%;
+  position: relative;
 }
 
 button.prev-btn,
 button.next-btn {
-  background-color: #28a745;
+  background-color: rgba(0, 0, 0, 0.5);
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 50%;
   padding: 10px 20px;
-  font-size: 1rem;
+  font-size: 1.5rem;
   cursor: pointer;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+button.prev-btn {
+  position: absolute;
+  left: 20px;
+}
+
+button.next-btn {
+  position: absolute;
+  right: 20px;
 }
 
 button.prev-btn:hover,
 button.next-btn:hover {
-  background-color: #218838;
+  background-color: rgba(0, 0, 0, 0.7);
+  transform: scale(1.1);
+}
+
+button.prev-btn:active,
+button.next-btn:active {
   transform: scale(1.05);
+}
+
+button.prev-btn i,
+button.next-btn i {
+  font-size: 1.8rem;
 }
 
 /* Contact and Social Links */
@@ -176,4 +200,43 @@ button.next-btn:hover {
 
 .add-new:focus {
   outline: none; /* Remove the focus outline */
+}
+
+.activity-container {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-top: 1px solid #ddd;
+}
+
+.activity-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.add-new {
+  width: 40px;
+  height: 40px;
+  background-color: #4CAF50;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.add-new:hover {
+  background-color: #45a049;
+}
+
+.add-new:focus {
+  outline: none;
 }

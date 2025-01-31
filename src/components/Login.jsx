@@ -13,7 +13,7 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-  const [isAuth, setIsAuth] = useState(false);
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,7 +26,7 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);  // show loading indicator
+    setLoading(true);
     console.log(formData);
     try {
 
@@ -40,7 +40,6 @@ function Login() {
 
       localStorage.setItem('authToken', token);
       localStorage.setItem('userId', userId);
-      localStorage.setItem('username', username);
       localStorage.setItem('isAuth',true);
 
       navigate('/home');

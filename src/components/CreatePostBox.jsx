@@ -154,4 +154,3 @@ const CreatePostBox=({userDetails, onClose})=>{
 }
 
 export default CreatePostBox;
-"ee630ac3-9a27-4ced-ad09-81987bd0c74f"
