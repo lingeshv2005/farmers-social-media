@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
+import GLogin from './GoogleLogin';
 import '../styles/Login.css';
 
 function Login() {
@@ -108,7 +108,7 @@ function Login() {
             <span className="btn-shine"></span>
           </button>
         </form>
-
+        <GLogin />
         <div className="login-footer">
           <p>
             Don't have an account?{' '}

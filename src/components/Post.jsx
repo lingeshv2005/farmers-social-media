@@ -109,8 +109,8 @@ const Post=(()=>{
                         post.postId === postId
                             ? { 
                                 ...post, 
-                                comments: response.data.post[0].comments || [],
-                                commentCount: response.data.post[0].comments.length||[]
+                                comments: response.data.post[0]?.comments || [],
+                                commentCount: response.data.post[0]?.comments.length||[]
                             }
                             : post
                     );

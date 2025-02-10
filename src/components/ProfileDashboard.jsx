@@ -137,7 +137,7 @@ const ProfileDashboard = () => {
               <div className="username-bio-time">
                 <div className="username">{data.username}</div>
                 <div className="bio">{data.bio}</div>
-                <div className="time">Just now</div>
+                <div className="time">Posted {new Date(posts[0].createdAt).toLocaleString()}</div>
               </div>
             </div>
           <div className="content">{posts[currentIndex].content}</div>

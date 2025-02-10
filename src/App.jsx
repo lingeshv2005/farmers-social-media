@@ -6,10 +6,15 @@ import '../src/styles/Base.css'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Post from './components/Post';
 import ProfileDashboard from './components/ProfileDashboard';
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
+
+const CLIENT_ID = "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";
 
 function App() {
   return (
+    <GoogleOAuthProvider clientId={CLIENT_ID}>
+
     <Router>
       <Navbar />
         <Routes>
@@ -19,6 +24,8 @@ function App() {
           <Route path="/profile-dashboard" element={<ProfileDashboard />} />
         </Routes>
       </Router>
+      </GoogleOAuthProvider>
+
   )
 }
 
