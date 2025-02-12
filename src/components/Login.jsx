@@ -41,7 +41,6 @@ function Login() {
       localStorage.setItem('authToken', token);
       localStorage.setItem('userId', userId);
       localStorage.setItem('isAuth',true);
-      
 
       navigate('/home');
     } catch (err) {
