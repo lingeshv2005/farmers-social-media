@@ -8,7 +8,7 @@ function GLogin() {
         const credential = response.credential;
         const user = jwtDecode(credential); 
 
-        const data = await axios.post('https://farmers-social-media-backend.onrender.com/api/googlelogin', {
+        const data = await axios.post('https://farmers-social-media-backend.onrender.com/api/v1/auth/googlelogin', {
             email: user.email,
             picture: user.picture,
             email_verified: user.email_verified,

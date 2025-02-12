@@ -24,11 +24,11 @@ const ProfileDashboard = () => {
             setLoading(true);
             const data = localStorage.getItem("userId");
 
-              const userDataResponse=await axios.get(`https://farmers-social-media-backend.onrender.com/api/getuserdetails/${data}`); 
+              const userDataResponse=await axios.get(`https://farmers-social-media-backend.onrender.com/api/v1/userdetails/getuserdetails/${data}`); 
               // console.log(userDataResponse.data);
               setUserDetails(userDataResponse.data);
 
-              const userPostsResponse=await axios.get(`https://farmers-social-media-backend.onrender.com/api/getpost/user/${data}`); 
+              const userPostsResponse=await axios.get(`https://farmers-social-media-backend.onrender.com/api/v1/posts/getpost/user/${data}`); 
               // console.log(userPostsResponse.data);
               setUserPostById(userPostsResponse.data);
 

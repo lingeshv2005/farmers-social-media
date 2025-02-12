@@ -42,7 +42,7 @@ const NewPostModal =({ userDetails, onClose})=>{
       formData.append("image",selectedFile);
 
       const imageResponse=await axios.post(
-        "https://farmers-social-media-backend.onrender.com/upload",
+        "https://farmers-social-media-backend.onrender.com/api/v1/photos/upload",
         formData,
         { headers:{"Content-Type":"multipart/form-data"},
       });
@@ -64,7 +64,7 @@ const NewPostModal =({ userDetails, onClose})=>{
       };
 
       axios.post(
-        "https://farmers-social-media-backend.onrender.com/api/createpost",
+        "https://farmers-social-media-backend.onrender.com/api/v1/posts/createpost",
         newPost
       )
       .then((response)=>{

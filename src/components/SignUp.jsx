@@ -30,7 +30,7 @@ function SignUp() {
     }
 
     try {
-      await axios.post('https://farmers-social-media-backend.onrender.com/api/signup', {
+      await axios.post('https://farmers-social-media-backend.onrender.com/api/v1/auth/signup', {
         username: formData.username,
         password: formData.password
       });

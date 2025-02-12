@@ -30,7 +30,7 @@ function Login() {
     console.log(formData);
     try {
 
-      const response = await axios.get('https://farmers-social-media-backend.onrender.com/api/login', {
+      const response = await axios.get('https://farmers-social-media-backend.onrender.com/api/v1/auth/login', {
         params:{
           username: formData.username,
           password: formData.password
