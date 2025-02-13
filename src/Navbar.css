@@ -1,31 +1,46 @@
-/* Navbar Container */
-nav {
-  position: fixed; /* Fix the navbar at the top */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+.nav-bar {
+  position: fixed;
   top: 0;
   left: 0;
-  width: 100%; /* Full width */
-  z-index: 1000; /* Ensure it stays above other elements */
-  background-color: #9cd17e; /* Light background for light mode */
-  border-bottom: 1px solid #d1d5db; /* Light gray border */
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  width: 100%;
+  z-index: 1000;
+  background-color: #9cd17e;
+  border-bottom: 1px solid #d1d5db;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
-  justify-content: space-between; /* Ensure the links go left and logo goes right */
-  align-items: center; /* Vertically center the items */
-  padding: 16px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  font-family: 'Poppins', sans-serif;
 }
 
-nav.dark {
-  background-color: #1f2937; /* Dark gray background for dark mode */
-  border-bottom: 1px solid #374151; /* Darker border for dark mode */
-}
-
-/* Navbar Links Section */
-.nav-links {
+.nav-left {
   display: flex;
   align-items: center;
+  gap: 10px;
 }
 
-nav ul {
+.brand-name {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #374151;
+}
+
+.navbar-logo {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Desktop Nav Links */
+.nav-links.desktop {
+  display: flex;
+}
+
+.nav-links.desktop ul {
   display: flex;
   gap: 16px;
   list-style: none;
@@ -33,7 +48,8 @@ nav ul {
   padding: 0;
 }
 
-nav ul li a {
+.nav-links.desktop ul li a,
+.logout-btn {
   display: block;
   padding: 8px 16px;
   font-size: 1rem;
@@ -43,55 +59,62 @@ nav ul li a {
   transition: all 0.3s ease;
 }
 
-nav ul li a:hover {
-  background-color: #e5e7eb; /* Light hover effect */
-  color: #1d4ed8; /* Blue text on hover */
+.nav-links.desktop ul li a:hover {
+  background-color: #e5e7eb;
+  color: #1d4ed8;
 }
 
-nav.dark ul li a {
-  color: #d1d5db; /* Light text for dark mode */
+/* Logout Button */
+.logout-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #dc2626;
+  font-weight: bold;
 }
 
-nav.dark ul li a:hover {
-  background-color: #374151; /* Dark hover effect */
-  color: #3b82f6; /* Light blue text on hover */
+.logout-btn:hover {
+  color: #b91c1c;
 }
 
-/* Active Link */
-nav ul li a.active {
-  background-color: #1d4ed8; /* Blue background for active link */
-  color: #ffffff; /* White text for active link */
+/* Mobile Menu */
+.menu-toggle {
+  display: none;
+  font-size: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
-/* Navbar Logo */
-.navbar-logo {
-  width: 50px; /* Adjust size as needed */
-  height: 50px; /* Ensure the height and width are equal to maintain the circle shape */
-  border-radius: 50%; /* This makes the image a circle */
-  overflow: hidden; /* Ensures the image is cropped into a circle */
-  object-fit: cover; /* Ensures the image covers the entire circle area */
+/* Hidden by Default */
+.nav-links.mobile {
+  display: none;
 }
 
-/* Responsive Design */
+/* Responsive Styling */
 @media (max-width: 768px) {
-  nav ul {
+  .menu-toggle {
+    display: block;
+  }
+
+  .nav-links.desktop {
     display: none;
+  }
+
+  .nav-links.mobile {
+    display: flex;
     flex-direction: column;
-    width: 100%;
+    position: absolute;
+    top: 60px;
+    right: 10px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2);
+    padding: 10px;
   }
 
-  nav button[data-collapse-toggle="navbar-default"][aria-expanded="true"] + #navbar-default {
-    display: flex;
-  }
-}
-
-@media (min-width: 768px) {
-  nav button {
-    display: none;
-  }
-
-  nav ul {
-    display: flex;
-    flex-direction: row;
+  .nav-links.mobile ul {
+    flex-direction: column;
+    gap: 10px;
   }
 }

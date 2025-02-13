@@ -1,4 +1,3 @@
-/* Profile Dashboard Container */
 .profile-dashboard {
   width: 90%;
   max-width: 800px;
@@ -10,7 +9,6 @@
   font-family: 'Arial', sans-serif;
 }
 
-/* Profile Header */
 .profile-background {
   width: 100%;
   height: 200px;
@@ -43,7 +41,6 @@
   line-height: 1.5;
 }
 
-/* Animal Types Section */
 .profile-dashboard ul {
   list-style: none;
   margin: 0;
@@ -56,7 +53,6 @@
   font-size: 1rem;
 }
 
-/* Activity Section */
 .activity-container {
   padding: 20px;
   background-color: #f9f9f9;
@@ -87,7 +83,6 @@
   margin: 15px 0;
 }
 
-/* Carousel Buttons */
 .carousel-buttons {
   display: flex;
   justify-content: space-between;
@@ -136,7 +131,6 @@ button.next-btn i {
   font-size: 1.8rem;
 }
 
-/* Contact and Social Links */
 .profile-dashboard a {
   text-decoration: none;
   color: #0073b1;
@@ -171,7 +165,7 @@ button.next-btn i {
   justify-content: center;
   width: 16px;
   height: 16px;
-  background-color: #0095f6; /* Instagram's blue */
+  background-color: #0095f6; 
   border-radius: 50%;
   color: white;
   font-size: 10px;
@@ -181,7 +175,7 @@ button.next-btn i {
 .add-new {
   width: 40px;
   height: 40px;
-  background-color: #4CAF50; /* Green background */
+  background-color: #4CAF50; 
   color: white;
   font-size: 24px;
   font-weight: bold;
@@ -195,11 +189,11 @@ button.next-btn i {
 }
 
 .add-new:hover {
-  background-color: #45a049; /* Slightly darker green when hovered */
+  background-color: #45a049; 
 }
 
 .add-new:focus {
-  outline: none; /* Remove the focus outline */
+  outline: none; 
 }
 
 .activity-container {

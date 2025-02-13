@@ -1,50 +1,43 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { TextField, Button, CircularProgress, IconButton, InputAdornment } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { motion } from 'framer-motion';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import '../styles/Base.css';
+
 import GLogin from './GoogleLogin';
-import '../styles/Login.css';
 
 function Login() {
-  const [formData, setFormData] = useState({
-    username: '',
-    password: '',
-  });
+  const [formData, setFormData] = useState({ username: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
-
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setFormData(prev => ({ ...prev, [name]: value }));
     setError('');
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    console.log(formData);
     try {
-
-      const response = await axios.get('https://farmers-social-media-backend.onrender.com/api/v1/auth/login', {
-        params:{
-          username: formData.username,
-          password: formData.password
-        }
-      });
-      const { token,userId } = response.data;
-
+      const response = await axios.get('https://farmers-social-media-backend.onrender.com/api/v1/auth/login', 
+        formData, { headers: { 'Content-Type': 'application/json' } }
+      );
+      const { token, userId } = response.data;
       localStorage.setItem('authToken', token);
       localStorage.setItem('userId', userId);
-      localStorage.setItem('isAuth',true);
+      localStorage.setItem('isAuth', 'true');
 
+      toast.success('Login successful!');
       navigate('/home');
     } catch (err) {
-      console.log(err);
       setError(err.response?.data?.message || 'Login failed. Please try again.');
     } finally {
       setLoading(false);
@@ -52,71 +45,47 @@ function Login() {
   };
 
   return (
-    <div className="login-container">
-      <div className="login-box">
-        <h1 className="login-title">Welcome Back!</h1>
-        <p className="login-subtitle">Connect with farmers and share your experiences</p>
-        
-        <form className="login-form" onSubmit={handleSubmit}>
+    <motion.div className="container" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+      <div className="box">
+        <h1 className="title">Welcome Back!</h1>
+        <p className="subtitle">Connect with farmers and share experiences</p>
+        <form className="form" onSubmit={handleSubmit}>
           {error && <div className="error-message">{error}</div>}
-          
-          <div className="login-input-group">
-            <input
-              type="text"
-              id="username"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              required
-              placeholder=" "
-            />
-            <label htmlFor="username">Username</label>
-          </div>
-
-          <div className="login-input-group">
-            <input
-              type={showPassword ? 'text' : 'password'}  // Toggle password visibility
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              placeholder=" "
-            />
-            <label htmlFor="password">Password</label>
-            <button
-              type="button"
-              onClick={() => setShowPassword(prev => !prev)}
-              className="password-toggle"
-            >
-              {showPassword ? 'Hide' : 'Show'}
-            </button>
-          </div>
-
-          <div className="form-footer">
-            <div className="remember-me">
-              <input type="checkbox" id="remember" />
-              <label htmlFor="remember">Remember me</label>
-            </div>
-            <Link to="/forgot-password" className="forgot-password">
-              Forgot Password?
-            </Link>
-          </div>
-
-          <button type="submit" className="login-btn" disabled={loading}>
-            {loading ? 'Logging in...' : 'Login'}  
-            <span className="btn-shine"></span>
-          </button>
+          <TextField fullWidth label="Username" name="username" value={formData.username} onChange={handleChange} required />
+          <TextField
+            fullWidth
+            label="Password"
+            name="password"
+            type={showPassword ? 'text' : 'password'}
+            value={formData.password}
+            onChange={handleChange}
+            required
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={() => setShowPassword(!showPassword)}>
+                    {showPassword ? <Visibility /> : <VisibilityOff />}  {/* Default closed eye */}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+          <Button 
+            type="submit" 
+            variant="contained" 
+            fullWidth 
+            disabled={loading}
+            sx={{ backgroundColor: '#10b981', '&:hover': { backgroundColor: '#0ea965' } }}
+          >
+            {loading ? <CircularProgress size={24} sx={{ color: 'white' }} /> : 'Login'}
+          </Button>
         </form>
+        <br />
         <GLogin />
-        <div className="login-footer">
-          <p>
-            Don't have an account?{' '}
-            <Link to="/signup">Sign up</Link>
-          </p>
-        </div>
+
+        <p className="footer">Don't have an account? <Link to="/signup">Sign up</Link></p>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
