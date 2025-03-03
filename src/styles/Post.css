@@ -1,162 +1,125 @@
+body {
+  padding-top: 80px; /* Adjust according to navbar height */
+}
 
 .post {
-  width: 500px;
-  max-width: 90%; /* More responsive for smaller screens */
+  width: 100%;
+  max-width: 550px;
   padding: 20px;
-  margin-bottom: 20px;
-  background-color: #ffffff;
+  margin: 20px auto;
+  background: #ffffff;
   border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Modern shadow effect */
-  transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s; /* Added transition for background color */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .post:hover {
-  transform: translateY(-5px); /* Subtle lift on hover */
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
-  background-color: #f7fafc; /* Light background color on hover */
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .header {
   display: flex;
-  justify-content: space-between; /* Spacing between user data and follow button */
   align-items: center;
-  margin-bottom: 16px;
+  justify-content: space-between;
+  margin-bottom: 15px;
 }
 
 .profile-logo {
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   object-fit: cover;
-  margin-right: 16px;
-  border: 2px solid #e2e8f0; /* Border for profile picture */
+  border: 2px solid #e2e8f0;
 }
 
 .username-bio-time {
-  display: flex;
-  flex-direction: column;
-  gap: 4px; /* Adds a small gap between username, bio, and time */
-  flex-grow: 1; /* Ensures that the username, bio, and time take up available space */
+  flex-grow: 1;
+  margin-left: 12px;
 }
 
 .username {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: bold;
-  color: #1a202c; /* Darker color for better readability */
+  color: #1a202c;
 }
 
 .bio {
-  font-size: 1rem;
-  color: #4a5568; /* Subtle gray */
+  font-size: 0.9rem;
+  color: #4a5568;
 }
 
 .time {
-  font-size: 0.9rem;
-  color: #718096; /* Lighter gray for time */
+  font-size: 0.8rem;
+  color: #718096;
 }
 
 .content {
-  margin: 10px 0;
   font-size: 1rem;
-  line-height: 1.6;
-  color: #2d3748; /* Slightly darker for text */
+  line-height: 1.5;
+  color: #2d3748;
+  margin: 12px 0;
 }
 
 .content-img {
   width: 100%;
-  max-width: 470px;
-  height: auto; /* Maintain aspect ratio */
+  max-height: 350px;
   border-radius: 8px;
   object-fit: cover;
+}
+
+.actions-container1 {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.actions-container2 {
+  display: flex;
+  justify-content: space-between;
   margin-top: 10px;
 }
 
 .action-btn {
   background: none;
   border: none;
-  cursor: pointer;
   font-size: 0.9rem;
+  font-weight: bold;
   color: #555;
-  display: flex;
-  align-items: center;
-  gap: 8px; /* Space between icon and text */
-  padding: 8px 12px; /* Add padding for clickable area */
-  border-radius: 5px; /* Rounded buttons */
-  transition: background-color 0.3s, color 0.3s;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .action-btn:hover {
-  color: #0073b1; /* LinkedIn-like blue hover effect */
-  background-color: #e2e8f0; /* Light gray background on hover */
-}
-
-.action-btn svg {
-  height: 16px;
-  width: 16px;
-}
-
-.actions-container1,
-.actions-container2 {
-  display: flex; /* Use flexbox */
-  justify-content: space-between; /* Better spacing for actions */
-  align-items: center; /* Align items vertically to the center */
-  padding: 10px 0; /* Add vertical padding */
-}
-
-.actions-container1 {
-  border-bottom: 1px solid #e2e8f0; /* Divider line */
-}
-
-.actions-container2 {
-  margin-top: 10px;
-}
-
-.actions-container2 .action-btn {
-  font-size: 1rem;
-  font-weight: bold;
-  color: #2b6cb0; /* Slightly brighter blue for buttons */
-}
-
-.actions-container2 .action-btn:hover {
-  color: #3182ce; /* Slight hover color change */
+  color: #0073b1;
+  background-color: #e2e8f0;
 }
 
 .follow-btn {
-  background-color: #3182ce; /* Blue color for the follow button */
+  background-color: #3182ce;
   color: white;
+  padding: 6px 12px;
   border: none;
-  padding: 8px 16px;
   border-radius: 5px;
   cursor: pointer;
   font-size: 0.9rem;
-  transition: background-color 0.3s;
-  white-space: nowrap; /* Ensures the text doesn’t break */
+  transition: background-color 0.3s ease;
 }
 
 .follow-btn:hover {
-  background-color: #2b6cb0; /* Darker blue on hover */
+  background-color: #2b6cb0;
 }
 
-.content-tags {
-  display: flex;
-  flex-wrap: wrap; /* Ensures tags wrap to the next line if necessary */
-  gap: 8px; /* Adds space between tags */
-}
-
-.tag {
-  color: #3182ce; /* Blue color for the tags */
-  cursor: pointer; /* Make the tags clickable */
-  font-size: 1rem;
-  font-weight: bold;
-  transition: color 0.3s;
-}
-
-.tag:hover {
-  color: #2b6cb0; /* Darker blue on hover */
-}
-
-.content-tags .tag::before {
-  content: "#"; /* Add hashtag symbol before the tag */
+.comment-input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-top: 10px;
+  font-size: 0.9rem;
 }
 
 .comments-list {
@@ -165,22 +128,17 @@
 }
 
 .comment {
-  margin-bottom: 10px;
   padding: 8px;
   border-radius: 5px;
-  background-color: #f1f1f1;
-}
-
-.comment strong {
-  color: #4CAF50; /* Color for usernames */
-  font-weight: bold;
-}
-
-.comment {
+  background: #f1f1f1;
+  margin-bottom: 8px;
   font-size: 14px;
-  color: #333;
 }
 
 .comment:hover {
-  background-color: #e0e0e0; /* Light hover effect */
+  background: #e0e0e0;
+}
+
+.comment strong {
+  color: #4CAF50;
 }

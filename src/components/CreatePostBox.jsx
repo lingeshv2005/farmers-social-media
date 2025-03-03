@@ -64,7 +64,7 @@ const NewPostModal =({ userDetails, onClose})=>{
       };
 
       axios.post(
-        "https://farmers-social-media-backend.onrender.com/api/v1/posts/createpost",
+        "http://localhost:8000/api/v1/posts/createpost",
         newPost
       )
       .then((response)=>{

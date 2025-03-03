@@ -27,16 +27,24 @@ function Login() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await axios.get('https://farmers-social-media-backend.onrender.com/api/v1/auth/login', 
-        formData, { headers: { 'Content-Type': 'application/json' } }
+      console.log(formData);
+      // const response = await axios.post('https://farmers-social-media-backend.onrender.com/api/v1/auth/login', 
+      const response = await axios.post('http://localhost:8000/api/v1/auth/login', 
+        { username: formData.username, password: formData.password },
+        { headers: { 'Content-Type': 'application/json' } }
       );
-      const { token, userId } = response.data;
+            const { token, userId } = response.data;
       localStorage.setItem('authToken', token);
       localStorage.setItem('userId', userId);
       localStorage.setItem('isAuth', 'true');
 
       toast.success('Login successful!');
       navigate('/home');
+
+      setTimeout(() => {
+        window.location.reload();
+    }, 100);
+
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed. Please try again.');
     } finally {

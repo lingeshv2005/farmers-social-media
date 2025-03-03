@@ -25,13 +25,13 @@ const Post=(()=>{
                     // console.log(userDataResponse.data);
                     // setUserDetails(userDataResponse.data);
 
-                    const postsResponse=await axios.get("https://farmers-social-media-backend.onrender.com/api/v1/posts/getposts"); 
+                    const postsResponse=await axios.get("http://localhost:8000/api/v1/posts/getposts"); 
                     console.log(postsResponse.data.posts);
                     setPosts(postsResponse.data.posts);
 
                     const uniqueUserIds=[...new Set(postsResponse.data.posts.map(post => post.userId))];
                     const userDetailsPromisis=uniqueUserIds.map(userId =>
-                        axios.get(`https://farmers-social-media-backend.onrender.com/api/v1/userdetails/getuserdetails/${userId}`)
+                        axios.get(`http://localhost:8000/api/v1/userdetails/getuserdetails/${userId}`)
                     )
 
                     const userDetailsResponses=await Promise.all(userDetailsPromisis);
@@ -65,7 +65,7 @@ const Post=(()=>{
             }
             try {
                 const response = await axios.post(
-                    `https://farmers-social-media-backend.onrender.com/api/v1/comments/comment/${postId}`,
+                    `http://localhost:8000/api/v1/comments/comment/${postId}`,
                     { commentedUserId: userId, content }
                 );
                 setPosts((prevPosts) => {
@@ -101,7 +101,7 @@ const Post=(()=>{
             if(!expandedComments[postId]){
             try {
                 const response = await axios.get(
-                    `https://farmers-social-media-backend.onrender.com/api/v1/comments/getcomment/${postId}`,
+                    `http://localhost:8000/api/v1/comments/getcomment/${postId}`,
                 );
                 console.log(response.data);
                 setPosts((prevPosts) => {
@@ -109,8 +109,8 @@ const Post=(()=>{
                         post.postId === postId
                             ? { 
                                 ...post, 
-                                comments: response.data.post[0]?.comments || [],
-                                commentCount: response.data.post[0]?.comments.length||[]
+                                comments: response.data.comments || [],
+                                commentCount: response.data.comments.length || 0
                             }
                             : post
                     );
@@ -129,7 +129,7 @@ const Post=(()=>{
                 return;
             }    
             try {
-                await axios.put(`https://farmers-social-media-backend.onrender.com/api/v1/posts/addlike/${postId}`, {
+                await axios.put(`http://localhost:8000/api/v1/posts/addlike/${postId}`, {
                     likeUserId: userId
                 });
                 setPosts((prevPosts) => {

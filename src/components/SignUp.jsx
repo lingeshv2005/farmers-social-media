@@ -31,27 +31,30 @@ function SignUp() {
 
     setLoading(true);
     try {
-      const user = await axios.post('https://farmers-social-media-backend.onrender.com/api/v1/auth/signup', 
+      // const user = await axios.get('https://farmers-social-media-backend.onrender.com/api/v1/auth/signup', 
+      const user = await axios.post('http://localhost:8000/api/v1/auth/signup', 
         { username: formData.username, password: formData.password },
         { headers: { 'Content-Type': 'application/json' } }
       );
-
+      
+      console.log(user.data.user.userId);
       // await axios.put(`https://farmers-social-media-backend.onrender.com/api/v1/userdetails/update/${user.data.userId}`, 
-      //   {
-      //     username: formData.username,
-      //     userId: user.data.userId,
-      //     email: user.data.email,
-      //     profilePicture: user.data.profilePic,
-      //     location: "India",
-      //     name: formData.username,
-      //     phone: "1234567890"
-      //   },
-      //   { headers: { 'Content-Type': 'application/json' } }
-      // );
+      await axios.put(`http://localhost:8000/api/v1/userdetails/update/${user.data.user.userId}`, 
+        {
+          username: formData.username,
+          userId: user.data.user.userId,
+          email: user.data.user.email,
+          profilePicture: user.data.user.profilePic,
+          location: "India",
+          name: formData.username,
+          phone: "1234567890"
+        },
+        { headers: { 'Content-Type': 'application/json' } }
+      );
 
       localStorage.setItem('isAuth', 'true');
       toast.success('Signup successful!');
-      navigate('/home'); 
+      navigate('/home');
     } catch (err) {
       setError(err.response?.data?.message || 'Signup failed. Please try again.');
     } finally {
@@ -116,7 +119,7 @@ function SignUp() {
             {loading ? <CircularProgress size={24} sx={{ color: 'white' }} /> : 'Create Account'}
           </Button>
         </form>
-        <p className="footer">Already have an account? <Link to="/">Login</Link></p>
+        <p className="footer">Already have an account? <Link to="/login">Login</Link></p>
       </div>
     </motion.div>
   );

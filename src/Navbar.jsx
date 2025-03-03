@@ -42,7 +42,7 @@ const Navbar = () => {
                 </motion.span>
             </div>
 
-            {/* Desktop Navigation (Always Visible) */}
+            {/* Desktop Navigation */}
             <div className="nav-links desktop">
                 <ul>
                     <li><Link to="/home">Home</Link></li>
@@ -64,7 +64,7 @@ const Navbar = () => {
                     ) : (
                         <>
                             <li><Link to="/signup">Sign Up</Link></li>
-                            <li><Link to="/">Login</Link></li>
+                            <li><Link to="/login">Login</Link></li>
                         </>
                     )}
                 </ul>
@@ -79,7 +79,7 @@ const Navbar = () => {
                 ☰
             </motion.button>
 
-            {/* Mobile Navigation (Hidden by Default) */}
+            {/* Mobile Navigation */}
             <AnimatePresence>
                 {menuOpen && (
                     <motion.div 
@@ -109,7 +109,7 @@ const Navbar = () => {
                             ) : (
                                 <>
                                     <li><Link to="/signup">Sign Up</Link></li>
-                                    <li><Link to="/">Login</Link></li>
+                                    <li><Link to="/login">Login</Link></li>
                                 </>
                             )}
                         </ul>
