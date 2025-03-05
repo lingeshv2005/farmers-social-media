@@ -17,6 +17,7 @@ const Navbar = () => {
 
     const handleLogout = () => {
         localStorage.removeItem("isAuth");
+        localStorage.removeItem("userId");
         setIsAuthenticated(false);
         toast.success("Logged out successfully!", { position: "top-right", autoClose: 2000 });
     };

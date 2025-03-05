@@ -1,0 +1,254 @@
+/* UpdateProfileDetails.css */
+
+/* Modal overlay styling */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Dimmed background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+  
+/* When modal is visible */
+.modal-overlay.show {
+    opacity: 1;
+}
+  
+/* Modal content */
+.modal-content {
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 450px;
+    max-width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    transform: translateY(-50px);
+    transition: transform 0.3s ease-out;
+    display: flex;
+    flex-direction: column;
+}
+  
+/* Header */
+.modal-content h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    background: #fff;
+    padding: 10px 0;
+    z-index: 10;
+}
+  
+/* Label and input fields */
+label {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 5px;
+    display: block;
+}
+  
+input[type="text"],
+input[type="email"],
+input[type="date"],
+textarea,
+select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    background-color: #f9f9f9;
+}
+  
+textarea {
+    height: 120px;
+    resize: vertical;
+}
+  
+/* Buttons */
+button {
+    padding: 12px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+  
+/* Submit button */
+button.save-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+  
+button.save-btn:hover {
+    background-color: #45a049;
+}
+  
+/* Cancel button */
+button.cancel-btn {
+    background-color: #f44336;
+    color: white;
+}
+  
+button.cancel-btn:hover {
+    background-color: #e53935;
+}
+  
+/* Modal actions (cancel/submit buttons) */
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    position: sticky;
+    bottom: 0;
+    background: #fff;
+    padding: 10px 0;
+    z-index: 10;
+}
+  
+.button-container button {
+    width: 48%;
+}
+  
+/* Checkboxes */
+label input[type="checkbox"] {
+    margin-right: 8px;
+}
+  
+/* Modal transition */
+.modal-overlay.show .modal-content {
+    transform: translateY(0);
+}
+  
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+}
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  width: 450px;
+  max-width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  transform: translateY(-20px);
+  transition: transform 0.3s ease-out;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-content h2 {
+  text-align: center;
+  color: #333;
+  position: sticky;
+  top: 0;
+  background: #fff;
+  padding: 10px 0;
+  z-index: 10;
+}
+
+label {
+  font-size: 14px;
+  font-weight: 600;
+  display: block;
+  margin: 10px 0 5px;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #f9f9f9;
+  font-size: 14px;
+}
+
+textarea {
+  height: 100px;
+  resize: vertical;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  position: sticky;
+  bottom: 0;
+  background: #fff;
+  padding: 10px 0;
+  z-index: 10;
+}
+
+button {
+  padding: 10px 15px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button.submit {
+  background-color: #4CAF50;
+  color: white;
+}
+
+button.submit:hover {
+  background-color: #45a049;
+}
+
+button.cancel {
+  background-color: #f44336;
+  color: white;
+}
+
+button.cancel:hover {
+  background-color: #e53935;
+}
+
+.modal-overlay.show .modal-content {
+  transform: translateY(0);
+}
+
+.modal textarea {
+    width: 100%;
+    padding: 10px;
+}
+  
+button {
+    margin: 10px;
+}

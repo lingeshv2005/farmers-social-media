@@ -13,6 +13,7 @@ const Post=(()=>{
     const [loading, setLoading] =useState(false);
     const [commentInputs, setCommentInputs] = useState({});
     const [expandedComments, setExpandedComments] = useState({});
+    const [following, setFollowing] = useState({});
 
     useEffect(()=>{ 
 
@@ -50,7 +51,25 @@ const Post=(()=>{
             fetchData();
         },[]);
 
-
+        const handleFollow = async (postUserId) => {
+            const userId = localStorage.getItem("userId");
+            if (!userId) {
+                alert("Please log in to follow users.");
+                return;
+            }
+        
+            try {
+                await axios.put(`http://localhost:8000/api/v1/userdetails/addfollower/${postUserId}`, {
+                    followerId: userId
+                });
+        
+                setFollowing((prev) => ({ ...prev, [postUserId]: true }));
+            } catch (error) {
+                console.error("Error following user:", error);
+                alert("Failed to follow the user. Please try again.");
+            }
+        };
+        
         const handleComment = async (postId) => {
             const userId = localStorage.getItem("userId");
             if (!userId) {
@@ -176,8 +195,14 @@ const Post=(()=>{
                         <div className="username">{userDetails.username}</div>
                         <div className="bio">{userDetails.bio}</div>
                         <div className="time">{formatDate(post.createdAt)}</div>
-                        </div>
-                    <button className='follow-btn'>Follow</button>
+                    </div>
+                    <button 
+                        className='follow-btn' 
+                        onClick={() => handleFollow(post.userId)}
+                        disabled={following[post.userId]} // Disable button if already followed
+                    >
+                        {following[post.userId] ? "Following" : "Follow"}
+                    </button>
                 </div>
                 <div className="content">{post.content}</div>
                 <div className="content">
@@ -188,7 +213,7 @@ const Post=(()=>{
                     </div>
                 </div>
                 <div className="content">PostType: {post.postType}</div>
-                <img src={farming} alt="PostImage" className="content-img"/>
+                <img src={`http://localhost:8000${post.images}`} alt="PostImage" className="content-img"/>
                 <div className="actions-container1">
                     <span>{post.likeCount || 0} Likes</span>
                     <span>{post.commentCount || 0} Comments</span>

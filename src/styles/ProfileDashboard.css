@@ -6,14 +6,13 @@
   overflow: hidden;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   margin: 20px auto;
-  font-family: 'Arial', sans-serif;
+  padding-bottom: 20px;
 }
 
 .profile-background {
   width: 100%;
   height: 200px;
   object-fit: cover;
-  display: block;
 }
 
 .profile-picture {
@@ -24,8 +23,6 @@
   object-fit: cover;
   position: relative;
   top: -60px;
-  left: 30px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .profile-dashboard h1 {
@@ -41,16 +38,74 @@
   line-height: 1.5;
 }
 
-.profile-dashboard ul {
-  list-style: none;
-  margin: 0;
-  padding: 0 30px;
+/* Verified Badge */
+.verified-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background-color: #0095f6; 
+  border-radius: 50%;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
 }
 
-.profile-dashboard ul li {
-  margin-bottom: 10px;
-  color: #555;
-  font-size: 1rem;
+.profile-header {
+  display: flex;
+  align-items: center; 
+  gap: 10px; /* Space between username and edit icon */
+  margin: 0 30px;
+}
+
+.edit-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #0073b1;
+  transition: color 0.3s ease;
+}
+
+.edit-btn:hover {
+  color: #005582;
+}
+
+/* Recent Activity Header Container */
+.activity-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 15px;
+  padding: 0 20px;
+}
+
+/* Add Post Button - Positioned to the right of Recent Activity */
+.add-post-btn {
+  width: 45px;
+  height: 45px;
+  background-color: #4CAF50;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.add-post-btn:hover {
+  background-color: #45a049;
+}
+
+.add-post-btn:focus {
+  outline: none;
 }
 
 .activity-container {
@@ -102,17 +157,6 @@ button.next-btn {
   font-size: 1.5rem;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-}
-
-button.prev-btn {
-  position: absolute;
-  left: 20px;
-}
-
-button.next-btn {
-  position: absolute;
-  right: 20px;
 }
 
 button.prev-btn:hover,
@@ -121,116 +165,37 @@ button.next-btn:hover {
   transform: scale(1.1);
 }
 
-button.prev-btn:active,
-button.next-btn:active {
-  transform: scale(1.05);
-}
-
-button.prev-btn i,
-button.next-btn i {
-  font-size: 1.8rem;
-}
-
-.profile-dashboard a {
-  text-decoration: none;
-  color: #0073b1;
-  transition: color 0.3s ease;
-}
-
-.profile-dashboard a:hover {
-  color: #005582;
-}
-
-.profile-dashboard h2 {
-  margin-top: 20px;
-  margin-left: 30px;
-  font-size: 1.5rem;
-  color: #333;
-  border-bottom: 2px solid #ddd;
-  padding-bottom: 5px;
-}
-
-.profile-dashboard .actions-container1 span {
-  font-size: 1rem;
-  color: #666;
-}
-
-.actions-container2 {
-  margin-top: 10px;
-}
-
-.verified-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 16px;
-  height: 16px;
-  background-color: #0095f6; 
-  border-radius: 50%;
-  color: white;
-  font-size: 10px;
-  font-weight: bold;
-}
-
-.add-new {
-  width: 40px;
-  height: 40px;
-  background-color: #4CAF50; 
-  color: white;
-  font-size: 24px;
-  font-weight: bold;
-  border: none;
-  border-radius: 50%;
+.dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
-  align-items: center;
   justify-content: center;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+  align-items: center;
+  z-index: 1000;
 }
 
-.add-new:hover {
-  background-color: #45a049; 
-}
-
-.add-new:focus {
-  outline: none; 
-}
-
-.activity-container {
+.dialog-box {
+  background: white;
   padding: 20px;
-  background-color: #f9f9f9;
-  border-top: 1px solid #ddd;
+  width: 600px; /* Increased width */
+  max-width: 95%;
+  max-height: 80vh; /* Decreased height */
+  overflow-y: auto; /* Added scroll */
+  border-radius: 10px;
+  position: relative;
 }
 
-.activity-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 1.5rem;
-  color: #333;
-  margin-bottom: 15px;
-}
-
-.add-new {
-  width: 40px;
-  height: 40px;
-  background-color: #4CAF50;
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: red;
   color: white;
-  font-size: 24px;
-  font-weight: bold;
   border: none;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  padding: 5px 10px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.add-new:hover {
-  background-color: #45a049;
-}
-
-.add-new:focus {
-  outline: none;
 }
