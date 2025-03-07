@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import '../styles/AllChat.css';
 
 export default function AllChats({ userId, openChat }) {
     const [communicationIds, setCommunicationIds] = useState([]);
@@ -30,8 +31,12 @@ export default function AllChats({ userId, openChat }) {
             ) : (
                 chatUsers.map(user => (
                     <div key={user.userId} className="chat-item" onClick={() => openChat(user)}>
-                        <img src={user.profilePic} alt="Profile" className="profile-pic" />
-                        <span>{user.username}</span>
+                    <img 
+                        src={user.profilePic ? user.profilePic : "./src/assets/shopping-product-3.png"} 
+                        alt="Profile" 
+                        className="profile-pic" 
+                    />
+                    <span>{user.username}</span>
                     </div>
                 ))
             )}

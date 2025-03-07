@@ -60,7 +60,7 @@ export default function ChatApp({ selectedChat, userId, closeChat }) {
         <div className="chat-container">
             <div className="chat-header">
                 <button className="back-button" onClick={closeChat}>⬅</button>
-                <img src={selectedChat.profilePic} alt="Profile" className="profile-pic" />
+                <img src={selectedChat.profilePic ? user.profilePic : "./src/assets/shopping-product-3.png"} alt="Profile" className="profile-pic" />
                 <span className="username">{selectedChat.username}</span>
             </div>
             

@@ -1,63 +1,86 @@
+
 /* Chat List Container */
 .chat-list-container {
-    width: 350px;
-    height: 100vh;
-    background: #f5f5f5;
-    border-right: 1px solid #ccc;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-}
-
-/* Chat Header */
-.chat-list-header {
+    width: 95%;
+    max-width: 500px;
+    margin: 10px auto;
     padding: 15px;
-    background: #075e54;
-    color: white;
-    font-weight: bold;
-    text-align: center;
-    font-size: 18px;
+    background-color: #9ed89e; /* Darker Green */
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    overflow-y: auto;
+    height: 85vh;
+    border-color: #000000;
 }
 
-/* Individual Chat Item */
+/* Header */
+.chat-list-container h2 {
+    font-size: 1.5rem;
+    text-align: center;
+    color: white;
+    margin-bottom: 15px;
+}
+
+/* Get Started Section */
+.get-started {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.get-started h3 {
+    font-size: 1.3rem;
+    color: white;
+}
+
+.get-started p {
+    font-size: 1rem;
+    color: #c8e6c9; /* Light green */
+}
+
+/* Chat Item */
 .chat-item {
     display: flex;
     align-items: center;
     padding: 12px;
+    border-radius: 10px;
+    margin: 10px 0;
+    background-color: #2e7d32; /* Dark green */
     cursor: pointer;
-    border-bottom: 1px solid #ddd;
-    background: white;
-    transition: background 0.2s;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    border-left: 5px solid #a5d6a7; /* Lighter green */
+    color: white;
 }
 
 .chat-item:hover {
-    background: #ebebeb;
+    background-color: #1b5e20; /* Even darker green */
+    transform: scale(1.02);
 }
 
 /* Profile Picture */
-.chat-item img {
-    width: 45px;
-    height: 45px;
+.profile-pic {
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
-    margin-right: 10px;
+    margin-right: 12px;
+    object-fit: cover;
+    border: 2px solid #c8e6c9;
 }
 
-/* Chat Details */
-.chat-details {
-    flex: 1;
+/* Chat Name */
+.chat-item span {
+    font-size: 1rem;
+    font-weight: 500;
+    color: white;
 }
 
-.chat-username {
-    font-weight: bold;
-    font-size: 16px;
+/* Active Chat Item */
+.chat-item.active {
+    background-color: #66bb6a; /* Brighter green */
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
-.chat-last-message {
-    font-size: 13px;
-    color: gray;
-}
-
-.chat-time {
-    font-size: 12px;
-    color: gray;
+.chat-item.active span {
+    color: white;
 }
