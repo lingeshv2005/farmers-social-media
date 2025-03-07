@@ -51,6 +51,7 @@ const Navbar = () => {
                         <>
                             <li><Link to="/profile-dashboard">Profile</Link></li>
                             <li><Link to="/notifications">Notifications</Link></li>
+                            <li><Link to="/chat">Chat</Link></li>  {/* ✅ Added Chat Link */}
                             <li>
                                 <motion.button 
                                     className="logout-btn" 
@@ -96,6 +97,7 @@ const Navbar = () => {
                                 <>
                                     <li><Link to="/profile-dashboard">Profile</Link></li>
                                     <li><Link to="/notifications">Notifications</Link></li>
+                                    <li><Link to="/chat">Chat</Link></li> {/* ✅ Added Chat Link */}
                                     <li>
                                         <motion.button 
                                             className="logout-btn" 

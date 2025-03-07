@@ -1,0 +1,63 @@
+/* Chat List Container */
+.chat-list-container {
+    width: 350px;
+    height: 100vh;
+    background: #f5f5f5;
+    border-right: 1px solid #ccc;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Chat Header */
+.chat-list-header {
+    padding: 15px;
+    background: #075e54;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    font-size: 18px;
+}
+
+/* Individual Chat Item */
+.chat-item {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    cursor: pointer;
+    border-bottom: 1px solid #ddd;
+    background: white;
+    transition: background 0.2s;
+}
+
+.chat-item:hover {
+    background: #ebebeb;
+}
+
+/* Profile Picture */
+.chat-item img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+/* Chat Details */
+.chat-details {
+    flex: 1;
+}
+
+.chat-username {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.chat-last-message {
+    font-size: 13px;
+    color: gray;
+}
+
+.chat-time {
+    font-size: 12px;
+    color: gray;
+}
