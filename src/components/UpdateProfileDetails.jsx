@@ -48,32 +48,39 @@ const UpdateProfile = ({ userId, onClose }) => {
 
   const uploadImage = async () => {
     if (!selectedFile) return null; // No new image selected
-
+  
     const formData = new FormData();
-    formData.append("profilePicture", selectedFile);
-
+    formData.append("images", selectedFile); // ✅ Ensure this key matches backend
+  
     try {
-      const res = await axios.post("http://localhost:8000/api/v1/upload", formData, {
+      const res = await axios.post("http://localhost:8000/api/v1/photos/upload", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-
+  
       return res.data.imageUrls[0]; // Backend should return the uploaded image URL
     } catch (err) {
       console.error("Error uploading image:", err);
       return null;
     }
   };
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const imageUrl = await uploadImage(); // Upload new image if selected
+    const updatedUser = { ...user };
+
     if (imageUrl) {
-      setUser((prevUser) => ({ ...prevUser, profilePicture: imageUrl })); // Update only frontend state
-      alert("Profile picture updated successfully!");
+      updatedUser.profilePicture = imageUrl; // Update profile picture in user object
+    }
+      try {
+      await axios.put(`http://localhost:8000/api/v1/userdetails/update/${userId}`, updatedUser);
+      alert("Profile updated successfully!");
+    } catch (err) {
+      console.error("Error updating user details:", err);
     }
   };
-
+  
   return (
     <div className="update-profile-container">
       <h2>Update Profile</h2>

@@ -18,24 +18,34 @@ const ProfileDashboard = () => {
     const fetchData = async () => {
       try {
         const userId = localStorage.getItem("userId");
-
+        if (!userId) {
+          console.error("❌ No userId found in localStorage!");
+          return;
+        }
+  
+        console.log("🔍 Fetching data for userId:", userId);
+  
         const [userResponse, postResponse] = await Promise.all([
           axios.get(`http://localhost:8000/api/v1/userdetails/getuserdetails/${userId}`),
           axios.get(`http://localhost:8000/api/v1/posts/getpost/user/${userId}`)
         ]);
-
+  
+        console.log("✅ User Details Fetched:", userResponse.data);
+        console.log("✅ User Posts Fetched:", postResponse.data.posts);
+  
         setUserDetails(userResponse.data || {});
         setUserPosts(postResponse.data.posts || []);
       } catch (err) {
+        console.error("❌ Failed to load data:", err);
         setError("Failed to load data. Please try again.");
       } finally {
         setLoading(false);
       }
     };
-
+  
     fetchData();
   }, []);
-
+  
   if (loading) return <div className="loading">Loading...</div>;
   if (error) return <div className="error">{error}</div>;
 
@@ -58,7 +68,7 @@ const ProfileDashboard = () => {
 
       {/* Profile Picture */}
       <img
-        src={userDetails.profilePicture ? `http://localhost:8000${userDetails.profilePicture}` : "./src/assets/farming.png"}
+        src={userDetails.profilePicture ? `http://localhost:8000${userDetails.profilePicture}` : "./src/assets/farmdoc.svg"}
         alt="Profile"
         className="profile-picture"
       />

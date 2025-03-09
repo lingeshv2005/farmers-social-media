@@ -28,11 +28,13 @@ const NewPostModal = ({ userDetails, onClose }) => {
   const handlePostSubmit = async () => {
     try {
       let uploadedImageUrls = [];
-
+  
       if (selectedFile) {
         const formData = new FormData();
-        formData.append("images", selectedFile); // ✅ Fixed field name
-
+        formData.append("images", selectedFile);
+  
+        console.log("Uploading image:", selectedFile); // Debugging
+  
         const imageResponse = await axios.post(
           "http://localhost:8000/api/v1/photos/upload",
           formData,
@@ -40,10 +42,12 @@ const NewPostModal = ({ userDetails, onClose }) => {
             headers: { "Content-Type": "multipart/form-data" },
           }
         );
-
-        uploadedImageUrls = imageResponse.data.imageUrls; // ✅ Fixed response key
+  
+        console.log("Image upload response:", imageResponse.data); // Debugging
+  
+        uploadedImageUrls = imageResponse.data.imageUrls;
       }
-
+  
       const newPost = {
         userId: userDetails.userId,
         username: userDetails.username,
@@ -55,20 +59,21 @@ const NewPostModal = ({ userDetails, onClose }) => {
         isShortFormVideo,
         isRepostable,
       };
-
-      await axios.post(
-        "http://localhost:8000/api/v1/posts/createpost",
-        newPost
-      );
-
+  
+      console.log("Submitting post:", newPost); // Debugging
+  
+      await axios.post("http://localhost:8000/api/v1/posts/createpost", newPost, {
+        headers: { "Content-Type": "application/json" },
+      });
+  
       setUploadMessage("Post created successfully!");
       onClose();
     } catch (err) {
-      console.error("Error:", err);
+      console.error("Error in handlePostSubmit:", err);
       alert("Failed to create post!");
     }
   };
-
+  
   return (
     <div className="modal-overlay show">
       <div className="modal-content">
