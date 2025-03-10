@@ -7,6 +7,7 @@ import Post from "./components/Post";
 import ProfileDashboard from "./components/ProfileDashboard";
 import AllChats from "./components/AllChats";
 import ChatApp from "./components/ChatApp";
+import GroupChat from "./components/GroupChat";
 
 const CLIENT_ID = "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";
 
@@ -22,6 +23,7 @@ function App() {
           <Route path="/profile-dashboard" element={<ProfileDashboard />} />
           <Route path="/chat" element={<AllChats />} />
           <Route path="/chat/:chatUserId" element={<ChatApp />} />
+          <Route path="/group-chat/:communicationId" element={<GroupChat />} />
         </Routes>
       </Router>
     </GoogleOAuthProvider>
