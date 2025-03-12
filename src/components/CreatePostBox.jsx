@@ -1,156 +1,223 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import axios from "axios";
+import { IconButton } from '@mui/material';
+import { ArrowBack } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
+import { API_BASE_URL, ENDPOINTS } from '../config/api';
 import "../styles/CreatePostBox.css";
 
-const NewPostModal =({ userDetails, onClose})=>{
-  const [tags,setTags] = useState([]);
-  const [postType, setPostType] = useState("farmUpdate");
+const NewPostModal = ({ onClose }) => {
+  const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [videos, setVideos] = useState([]);
-  const [isShortFormVideo, setIsShortFormVideo] = useState(false);
-  const [isRepostable, setIsRepostable] = useState(true);
-
-  const [images,setImages] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [uploadMessage, setUploadMessage] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
+  const navigate = useNavigate();
+  const token = localStorage.getItem('token');
+  const userId = localStorage.getItem('userId');
+  const username = localStorage.getItem('username');
 
-  const handleTagChange=(e)=>{
-    const tag=e.target.value;
-    if(tag && !tags.includes(tag)){
-      setTags([...tags,tag]);
-    }
-  };
-
-  const handleFileChange=(e)=>{
-    const file=e.target.files[0];
-    if(file){
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        setUploadMessage("Please select an image file");
+        return;
+      }
+      // Validate file size (5MB limit)
+      if (file.size > 5 * 1024 * 1024) {
+        setUploadMessage("Image size should be less than 5MB");
+        return;
+      }
       setSelectedFile(file);
       setImagePreview(URL.createObjectURL(file));
     }
   };
 
-  const handlePostSubmit =async ()=>{
-    try{
+  const handleCancel = () => {
+    // Reset all form fields
+    setTitle("");
+    setContent("");
+    setSelectedFile(null);
+    setImagePreview(null);
+    setUploadMessage("");
+    setIsUploading(false);
+    // Navigate back to posts page
+    navigate('/posts');
+  };
 
-      if(!selectedFile){
+  const handlePostSubmit = async () => {
+    try {
+      if (!token || !userId || !username) {
+        setUploadMessage("Please log in to create a post.");
+        navigate('/login');
+        return;
+      }
+
+      if (!selectedFile) {
         setUploadMessage("Please select an image first.");
         return;
       }
 
-      const formData=new FormData();
-      formData.append("image",selectedFile);
+      setIsUploading(true);
+      setUploadMessage("Uploading image...");
 
-      const imageResponse=await axios.post(
-        "https://farmers-social-media-backend.onrender.com/api/v1/photos/upload",
+      const formData = new FormData();
+      formData.append("image", selectedFile);
+
+      // Upload image to Cloudinary through our backend
+      console.log('Uploading image to:', `${API_BASE_URL}${ENDPOINTS.UPLOAD_PHOTO}`);
+      const imageResponse = await axios.post(
+        `${API_BASE_URL}${ENDPOINTS.UPLOAD_PHOTO}`,
         formData,
-        { headers:{"Content-Type":"multipart/form-data"},
-      });
+        { 
+          headers: { 
+            "Content-Type": "multipart/form-data",
+            "Authorization": `Bearer ${token}`
+          }
+        }
+      );
 
-      const uploadedImageUrl = `https://farmers-social-media-backend.onrender.com${imageResponse.data.imageUrl}`;
-      setImages((prevImages)=>{
-        const updatedImages=[...prevImages,uploadedImageUrl];
+      console.log('Image upload response:', imageResponse.data);
 
-      const newPost ={
-        userId:userDetails.userId,
-        username:userDetails.username,
-        tags,
-        postType,
-        content,
-        images:updatedImages,
-        videos,
-        isShortFormVideo,
-        isRepostable
+      if (!imageResponse.data || !imageResponse.data.imageUrl) {
+        throw new Error("Failed to get image URL from response");
+      }
+
+      const uploadedImageUrl = imageResponse.data.imageUrl;
+      console.log('Cloudinary image URL:', uploadedImageUrl);
+
+      // Create the post with the Cloudinary image URL
+      const newPost = {
+        userId: userId,
+        authorName: username,
+        title: title.trim(),
+        content: content.trim(),
+        images: [uploadedImageUrl],
+        postType: 'farmUpdate',
+        likeUsers: [],
+        likeCount: 0,
+        commentCount: 0
       };
 
-      axios.post(
-        "http://localhost:8000/api/v1/posts/createpost",
-        newPost
-      )
-      .then((response)=>{
-        setUploadMessage("Post created successfully");
-        console.log("Post created successfully: ",response.data);
-        onClose();
-      }).catch((err)=>{
-        console.error("Error: ",err);
-        alert("Failed to create post!");
-      })
-      return updatedImages;
-    });
-  
-    }catch(err){
-      console.error("Error:", err);
-      alert("Failed to create post!");
-    }
-  }
+      console.log('Creating post with data:', newPost);
 
+      const postResponse = await axios.post(
+        `${API_BASE_URL}${ENDPOINTS.CREATE_POST}`,
+        newPost,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          }
+        }
+      );
+
+      console.log('Post creation response:', postResponse.data);
+
+      if (postResponse.data.success) {
+        setUploadMessage("Post created successfully");
+        handleCancel();
+      } else {
+        throw new Error(postResponse.data.message || "Failed to create post");
+      }
+
+    } catch (err) {
+      console.error("Error:", err);
+      if (err.response?.status === 503) {
+        setUploadMessage("Server is temporarily unavailable. Please try again in a few minutes.");
+      } else if (err.response?.status === 401) {
+        setUploadMessage("Please log in again to create a post.");
+        localStorage.removeItem('token');
+        localStorage.removeItem('userId');
+        localStorage.removeItem('username');
+        localStorage.removeItem('isAuth');
+        navigate('/login');
+      } else if (err.response?.status === 400) {
+        console.error("Server response:", err.response.data);
+        setUploadMessage(err.response.data.message || "Invalid post data. Please check your input.");
+      } else {
+        setUploadMessage(err.response?.data?.message || "Failed to create post. Please try again.");
+      }
+      setIsUploading(false);
+    }
+  };
 
   return (
     <div className="modal-overlay show">
       <div className="modal-content">
-        <h2>Create New Post</h2>
+        <div className="modal-header">
+          <IconButton 
+            onClick={handleCancel}
+            sx={{ 
+              position: 'absolute',
+              left: 10,
+              top: 10,
+              color: '#666',
+              '&:hover': {
+                backgroundColor: 'rgba(0, 0, 0, 0.04)'
+              }
+            }}
+          >
+            <ArrowBack />
+          </IconButton>
+          <h2>Create New Post</h2>
+        </div>
 
-        <label>Tags (comma separated)</label>
-        <input type="text" onChange={handleTagChange} />
-
-        <label>Post Type</label>
-        <select value={postType} onChange={(e)=>setPostType(e.target.value)}>
-          <option value="farmUpdate">Farm Update</option>
-          <option value="diseaseQuestion">Disease Question</option>
-        </select>
+        <label>Title</label>
+        <input 
+          type="text" 
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Enter post title"
+        />
 
         <label>Content</label>
         <textarea 
           value={content}
-          onChange={(e)=>setContent(e.target.value)}
+          onChange={(e) => setContent(e.target.value)}
+          placeholder="Write your post content..."
         />
 
-
         <label>Upload Image</label>
-        <input type="file" accept="image/*" onChange={handleFileChange}/>
-        {imagePreview && <img src={imagePreview} alt="Priview" />}
-
-        <label>Videos (comma separated URLs)</label>
-        <input type="text" onChange={(e)=> setVideos(e.target.value.split(","))}/>
-
-        <label>Short From Video?
-          <input 
-            type="checkbox" 
-            checked={isShortFormVideo} 
-            onChange={(e)=>setIsShortFormVideo(e.target.checked)} 
+        <input 
+          type="file" 
+          accept="image/*" 
+          onChange={handleFileChange}
+          disabled={isUploading}
+        />
+        {imagePreview && (
+          <img 
+            src={imagePreview} 
+            alt="Preview" 
+            style={{ maxWidth: '100%', marginTop: '10px' }}
           />
-        </label>
-
-        <label>Is Repostable?
-          <input 
-            type="checkbox" 
-            checked={isRepostable} 
-            onChange={(e)=>setIsRepostable(e.target.checked)} 
-          />
-        </label>
+        )}
 
         <div className="modal-actions">
-          <button onClick={onClose}>Cancel</button>
-          <button className="submit" onClick={handlePostSubmit}>
-            Submit
+          <button onClick={handleCancel} disabled={isUploading}>Cancel</button>
+          <button 
+            className="submit" 
+            onClick={handlePostSubmit}
+            disabled={!title.trim() || !content.trim() || !selectedFile || isUploading}
+          >
+            {isUploading ? 'Uploading...' : 'Submit'}
           </button>
         </div>
-        {uploadMessage && <p>{uploadMessage}</p>}  
-
+        {uploadMessage && <p className={uploadMessage.includes('successfully') ? 'success' : 'error'}>{uploadMessage}</p>}
       </div>
     </div>
+  );
+};
 
-  )
-}
-
-
-const CreatePostBox=({userDetails, onClose})=>{
-
-  return(
+const CreatePostBox = ({ onClose }) => {
+  return (
     <div>
-      <NewPostModal  userDetails={userDetails} onClose={onClose}/>
+      <NewPostModal onClose={onClose} />
     </div>
-  )
-}
+  );
+};
 
 export default CreatePostBox;

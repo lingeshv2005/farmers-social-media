@@ -1,253 +1,552 @@
-import React, { useState, useEffect } from 'react';
-import axios from "axios";
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { 
+  Card, 
+  CardContent, 
+  CardMedia, 
+  Typography, 
+  IconButton, 
+  Avatar, 
+  Box, 
+  CircularProgress,
+  Chip,
+  Fab,
+  TextField,
+  Button,
+  Collapse
+} from '@mui/material';
+import { 
+  Favorite, 
+  FavoriteBorder, 
+  Comment, 
+  Delete,
+  Share,
+  Add,
+  Send
+} from '@mui/icons-material';
+import { motion, AnimatePresence } from 'framer-motion';
+import { toast } from 'react-toastify';
+import axiosInstance from '../utils/axios';
+import { ENDPOINTS, API_BASE_URL } from '../config/api';
+import '../styles/Post.css';
 
-import logo from "../assets/farmdoc.svg";
-import farming from "../assets/farming.png";
+function Post() {
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [expandedPost, setExpandedPost] = useState(null);
+  const [comment, setComment] = useState('');
+  const [comments, setComments] = useState({});
+  const navigate = useNavigate();
+  const userId = localStorage.getItem('userId');
+  const username = localStorage.getItem('username');
 
-import "../styles/Post.css";
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const isAuth = localStorage.getItem('isAuth');
+    
+    if (!token || !isAuth) {
+      navigate('/login');
+      return;
+    }
+    fetchPosts();
+  }, [navigate]);
 
-const Post=(()=>{    
+  const formatImageUrl = (imageUrl) => {
+    if (!imageUrl) {
+      console.log('No image URL provided');
+      return null;
+    }
+    
+    console.log('Formatting image URL:', imageUrl);
+    
+    // If it's already a full URL, return it
+    if (imageUrl.startsWith('http')) {
+      console.log('Full URL detected:', imageUrl);
+      return imageUrl;
+    }
+    
+    // If it starts with /uploads/, it's already in the correct format
+    if (imageUrl.startsWith('/uploads/')) {
+      const formattedUrl = `${API_BASE_URL}${imageUrl}`;
+      console.log('Formatted uploads URL:', formattedUrl);
+      return formattedUrl;
+    }
+    
+    // If it's just a filename, construct the full URL
+    const formattedUrl = `${API_BASE_URL}/uploads/${imageUrl}`;
+    console.log('Formatted filename URL:', formattedUrl);
+    return formattedUrl;
+  };
 
-    const [userDetailsMap, setUserDetailsMap] =useState(null);
-    const [posts, setPosts] =useState(null);
-    const [loading, setLoading] =useState(false);
-    const [commentInputs, setCommentInputs] = useState({});
-    const [expandedComments, setExpandedComments] = useState({});
-
-    useEffect(()=>{ 
-
-        const fetchData =async ()=>{
-                try{
+  const fetchPosts = async () => {
+    try {
                     setLoading(true);
-
-                    // // const data = localStorage.getItem("userId");
-                    // const userDataResponse=await axios.get(`https://farmers-social-media-backend.onrender.com/api/getuserdetails/${data}`); 
-                    // console.log(userDataResponse.data);
-                    // setUserDetails(userDataResponse.data);
-
-                    const postsResponse=await axios.get("http://localhost:8000/api/v1/posts/getposts"); 
-                    console.log(postsResponse.data.posts);
-                    setPosts(postsResponse.data.posts);
-
-                    const uniqueUserIds=[...new Set(postsResponse.data.posts.map(post => post.userId))];
-                    const userDetailsPromisis=uniqueUserIds.map(userId =>
-                        axios.get(`http://localhost:8000/api/v1/userdetails/getuserdetails/${userId}`)
-                    )
-
-                    const userDetailsResponses=await Promise.all(userDetailsPromisis);
-                    const userDetailsData=userDetailsResponses.reduce((acc,response)=>{
-                        acc[response.data.userId]=response.data;
-                        return acc;
-                    }, {}); 
-
-                    setUserDetailsMap(userDetailsData);
-                }catch(err){
-                    console.log(err);
-                }finally{
+      setError('');
+      
+      const response = await axiosInstance.get(ENDPOINTS.POSTS);
+      console.log('Posts response:', response.data);
+      
+      if (response.data && response.data.posts) {
+        console.log('Sample post:', response.data.posts[0]);
+        const formattedPosts = response.data.posts.map(post => {
+          console.log('Processing post:', post);
+          return {
+            ...post,
+            postId: post.postId || post._id,
+            images: Array.isArray(post.images) ? post.images : [],
+            authorName: post.authorName || '',
+            postType: post.postType || 'farmUpdate',
+            likeUsers: Array.isArray(post.likeUsers) ? post.likeUsers : [],
+            likeCount: post.likeCount || 0,
+            commentCount: post.commentCount || 0
+          };
+        });
+        setPosts(formattedPosts);
+      } else {
+        console.warn('Unexpected response format:', response.data);
+        setPosts([]);
+      }
+    } catch (err) {
+      console.error('Fetch posts error:', err);
+      
+      if (err.response?.status === 502) {
+        setError('Server is temporarily unavailable. Retrying...');
+        toast.warning('Server is temporarily unavailable. Retrying...');
+      } else if (err.response?.status === 401) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('userId');
+        localStorage.removeItem('username');
+        localStorage.removeItem('isAuth');
+        navigate('/login');
+      } else {
+        const errorMessage = err.response?.data?.message || err.message || 'Failed to fetch posts';
+        setError(errorMessage);
+        toast.error(errorMessage);
+      }
+    } finally {
                     setLoading(false);
                 }
-            }
-            fetchData();
-        },[]);
+  };
 
-
-        const handleComment = async (postId) => {
-            const userId = localStorage.getItem("userId");
-            if (!userId) {
-                alert("Please log in to comment.");
-                return;
-            }
-
-            const content = commentInputs[postId] || "";
-            if (!content.trim()) {
-                alert("Comment cannot be empty.");
-                return;
-            }
-            try {
-                const response = await axios.post(
-                    `http://localhost:8000/api/v1/comments/comment/${postId}`,
-                    { commentedUserId: userId, content }
-                );
-                setPosts((prevPosts) => {
-                    return prevPosts.map((post) =>
-                        post.postId === postId
-                            ? { 
-                                ...post, 
-                                comments: response.data.post.comments,
-                                commentCount: response.data.post.comments.length // Update count
-                            }
-                            : post
-                    );
-                });
-                setCommentInputs((prev) => ({ ...prev, [postId]: "" }));
-            } catch (error) {
-                console.error("Error adding comment:", error);
-                alert("Failed to add comment. Please try again.");
-            }
-        };
-
-
-        const handleToggleComments = async(postId) => {
-            const userId = localStorage.getItem("userId");
-            if (!userId) {
-                alert("Please log in to comment.");
-                return;
-            }
-            setExpandedComments((prev) => ({
-                ...prev,
-                [postId]: !prev[postId],
-            }));
-
-            if(!expandedComments[postId]){
-            try {
-                const response = await axios.get(
-                    `http://localhost:8000/api/v1/comments/getcomment/${postId}`,
-                );
-                console.log(response.data);
-                setPosts((prevPosts) => {
-                    return prevPosts.map((post) =>
-                        post.postId === postId
-                            ? { 
-                                ...post, 
-                                comments: response.data.comments || [],
-                                commentCount: response.data.comments.length || 0
-                            }
-                            : post
-                    );
-                });
-            } catch (error) {
-                console.error("Error reterving comment:", error);
-                alert("Failed to get comment. Please try again.");
-            }
-        }
-        };
-
-        const handleLike = async (postId, index) => {
-            const userId = localStorage.getItem("userId");
-            if (!userId) {
-                alert("Please log in to like posts.");
-                return;
-            }    
-            try {
-                await axios.put(`http://localhost:8000/api/v1/posts/addlike/${postId}`, {
-                    likeUserId: userId
-                });
-                setPosts((prevPosts) => {
-                    const updatedPosts = [...prevPosts];
-                    const updatedPost = { ...updatedPosts[index] };
-
-                    if (!updatedPost.likeUsers.includes(userId)) {
-                        updatedPost.likeUsers = [...updatedPost.likeUsers, userId];
-                        updatedPost.likeCount = (updatedPost.likeCount || 0) + 1;
-                    }
-
-                    updatedPosts[index] = updatedPost;
-                    return updatedPosts;
-                });
-            } catch (error) {
-                console.error("Error liking post:", error);
-                alert("Failed to like the post. Please try again.");
-            }
-        };
-    
-        if (loading) return <div>Loading...</div>;
-        if (!posts) return <div>Error fetching posts. Please try again later.</div>;
-        if (posts.length===0) return <div>No posts available.</div>;
-    
-    // const data=posts.posts;
-
-    const formatDate = (date) => {
-        const options = { year: 'numeric', month: 'short', day: 'numeric' };
-        return new Date(date).toLocaleDateString('en-US', options);
-      };
+  const handleLike = async (postId) => {
+    try {
+      console.log('Liking post with ID:', postId);
+      const response = await axiosInstance.put(`${ENDPOINTS.LIKE_POST}/${postId}`, {
+        likeUserId: userId
+      });
       
-    return(
-        <>
-            {posts.map((post,index)=>{
-            const userDetails = userDetailsMap[post.userId];
+      if (response.data && response.data.success) {
+        setPosts(posts.map(post => {
+          if (post.postId === postId) {
+            return {
+              ...post,
+              likeCount: response.data.post.likeCount,
+              likeUsers: response.data.post.likeUsers
+            };
+          }
+          return post;
+        }));
+        
+        toast.success(response.data.message);
+      }
+    } catch (err) {
+      console.error('Like error:', err.response?.data || err);
+      toast.error(err.response?.data?.message || 'Failed to like post');
+    }
+  };
 
-            if (!userDetails) return <div key={index}>Loading user details...</div>;
+  const handleDelete = async (postId) => {
+    try {
+      const response = await axiosInstance.delete(`${ENDPOINTS.DELETE_POST}/${postId}`);
+      
+      if (response.data.success) {
+        toast.success('Post deleted successfully');
+        setPosts(posts.filter(post => post.postId !== postId));
+      }
+    } catch (err) {
+      toast.error('Failed to delete post');
+      console.error('Delete error:', err);
+    }
+  };
 
-            return(
-                <div key={index} className="post">
-                <div className="header">
-                    <img src={logo} alt="Profile Logo" className="profile-logo" />
-                    <div className="username-bio-time">
-                        <div className="username">{userDetails.username}</div>
-                        <div className="bio">{userDetails.bio}</div>
-                        <div className="time">{formatDate(post.createdAt)}</div>
-                        </div>
-                    <button className='follow-btn'>Follow</button>
-                </div>
-                <div className="content">{post.content}</div>
-                <div className="content">
-                    <div className="content-tags">
-                    {post.tags && post.tags.map((tag, index) => (
-                        <span key={index} className="tag">{tag}</span>
+  const fetchComments = async (postId) => {
+    try {
+      const response = await axiosInstance.get(`${ENDPOINTS.GET_COMMENTS}/${postId}`);
+      if (response.data.success) {
+        setComments(prev => ({
+          ...prev,
+          [postId]: response.data.comments || []
+        }));
+      }
+    } catch (err) {
+      console.error('Fetch comments error:', err);
+      toast.error(err.response?.data?.message || 'Failed to load comments');
+    }
+  };
+
+  const handleComment = async (postId) => {
+    if (!comment.trim()) return;
+
+    try {
+      const response = await axiosInstance.post(ENDPOINTS.ADD_COMMENT, {
+        postId,
+        content: comment.trim(),
+        userId,
+        authorName: username
+      });
+
+      if (response.data.success) {
+        const newComment = response.data.comment;
+        setComments(prev => ({
+                ...prev,
+          [postId]: [...(prev[postId] || []), newComment]
+        }));
+        
+        setPosts(posts.map(post => {
+          if (post.postId === postId) {
+            return {
+                                ...post, 
+              commentCount: (post.commentCount || 0) + 1
+            };
+          }
+          return post;
+        }));
+
+        setComment('');
+        toast.success(response.data.message || 'Comment added successfully');
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to add comment');
+      console.error('Comment error:', err);
+    }
+  };
+
+  const handleDeleteComment = async (postId, commentId) => {
+    try {
+      const response = await axiosInstance.delete(`${ENDPOINTS.DELETE_COMMENT}/${commentId}`);
+      
+      if (response.data.success) {
+        setComments(prev => ({
+          ...prev,
+          [postId]: prev[postId].filter(comment => comment._id !== commentId)
+        }));
+        
+        setPosts(posts.map(post => {
+          if (post.postId === postId) {
+            return {
+              ...post,
+              commentCount: Math.max(0, (post.commentCount || 0) - 1)
+            };
+          }
+          return post;
+        }));
+
+        toast.success(response.data.message || 'Comment deleted successfully');
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to delete comment');
+      console.error('Delete comment error:', err);
+    }
+  };
+
+  const formatDate = (date) => {
+    return new Date(date).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+
+  const handleExpandComments = (postId) => {
+    if (expandedPost === postId) {
+      setExpandedPost(null);
+    } else {
+      setExpandedPost(postId);
+      fetchComments(postId);
+    }
+  };
+
+  if (loading) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="80vh">
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="80vh">
+        <Typography color="error">{error}</Typography>
+      </Box>
+    );
+  }
+
+  if (posts.length === 0) {
+    return (
+      <Box 
+        display="flex" 
+        flexDirection="column" 
+        justifyContent="center" 
+        alignItems="center" 
+        minHeight="80vh"
+        gap={3}
+        textAlign="center"
+        padding={3}
+      >
+        <Typography variant="h5" color="textSecondary">
+          No posts available
+        </Typography>
+        <Typography variant="body1" color="textSecondary" sx={{ maxWidth: '400px' }}>
+          Be the first to share your farming experiences and connect with other farmers in the community.
+        </Typography>
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<Add />}
+          onClick={() => navigate('/create-post')}
+          sx={{
+            mt: 2,
+            padding: '10px 24px',
+            borderRadius: '20px',
+            textTransform: 'none',
+            fontSize: '1rem'
+          }}
+        >
+          Create Your First Post
+        </Button>
+      </Box>
+    );
+  }
+
+  return (
+    <motion.div 
+      className="posts-container"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
+      <Fab 
+        color="primary" 
+        aria-label="add post"
+        onClick={() => navigate('/create-post')}
+        sx={{
+          position: 'fixed',
+          bottom: 20,
+          right: 20,
+          zIndex: 1000
+        }}
+      >
+        <Add />
+      </Fab>
+      
+      {posts.map((post) => (
+        <motion.div
+          key={post.postId}
+          initial={{ y: 50, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          <Card className="post-card">
+            <Box className="post-header">
+              <Box className="post-user-info">
+                <Avatar alt={post.authorName} src="/default-avatar.png" />
+                <Box>
+                  <Typography variant="h6">{post.authorName}</Typography>
+                  <Typography variant="caption" color="textSecondary">
+                    {formatDate(post.createdAt)}
+                  </Typography>
+                </Box>
+              </Box>
+              {post.userId === userId && (
+                <IconButton onClick={() => handleDelete(post.postId)} color="error">
+                  <Delete />
+                </IconButton>
+              )}
+            </Box>
+
+            <CardContent>
+              <Typography variant="h6" gutterBottom>
+                {post.title}
+              </Typography>
+              <Typography variant="body1" className="post-content">
+                {post.content}
+              </Typography>
+              <Box mt={1}>
+                <Chip 
+                  label={post.postType} 
+                  size="small" 
+                  color="primary" 
+                  variant="outlined"
+                />
+              </Box>
+            </CardContent>
+
+            <Box 
+              className="post-image-container"
+              sx={{
+                width: '100%',
+                backgroundColor: '#f5f5f5',
+                position: 'relative',
+                overflow: 'hidden',
+                borderRadius: '4px',
+                marginTop: '16px',
+                minHeight: '200px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            >
+              {post.images && post.images.length > 0 ? (
+                <>
+                  <CardMedia
+                    component="img"
+                    image={post.images[0]}
+                    alt="Post image"
+                    className="post-image"
+                    sx={{
+                      width: '100%',
+                      height: 'auto',
+                      maxHeight: '500px',
+                      objectFit: 'contain',
+                      display: 'block'
+                    }}
+                    onError={(e) => {
+                      console.error('Image loading error:', e);
+                      console.error('Failed image URL:', post.images[0]);
+                      console.error('Post data:', post);
+                      e.target.src = '/placeholder-image.png';
+                    }}
+                  />
+                  {post.images.length > 1 && (
+                    <Box
+                      sx={{
+                        position: 'absolute',
+                        bottom: 8,
+                        right: 8,
+                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                        color: 'white',
+                        padding: '4px 8px',
+                        borderRadius: '4px',
+                        fontSize: '0.875rem'
+                      }}
+                    >
+                      +{post.images.length - 1} more
+                    </Box>
+                  )}
+                </>
+              ) : (
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: 1,
+                    color: '#666',
+                    textAlign: 'center',
+                    padding: 2
+                  }}
+                >
+                  <Typography variant="h6" sx={{ fontSize: '1.2rem' }}>
+                    No Image
+                  </Typography>
+                  <Typography variant="body2" sx={{ fontSize: '0.9rem' }}>
+                    This post doesn't contain any images
+                  </Typography>
+                </Box>
+              )}
+            </Box>
+
+            <Box className="post-actions">
+              <Box className="action-item">
+                <IconButton 
+                  onClick={() => handleLike(post.postId)} 
+                  color={post.likeUsers?.includes(userId) ? "error" : "default"}
+                >
+                  {post.likeUsers?.includes(userId) ? <Favorite /> : <FavoriteBorder />}
+                </IconButton>
+                <Typography>{post.likeCount || 0}</Typography>
+              </Box>
+              <Box className="action-item">
+                <IconButton onClick={() => handleExpandComments(post.postId)} color="primary">
+                  <Comment />
+                </IconButton>
+                <Typography>{post.commentCount || 0}</Typography>
+              </Box>
+              <Box className="action-item">
+                <IconButton color="primary">
+                  <Share />
+                </IconButton>
+              </Box>
+            </Box>
+
+            <Collapse in={expandedPost === post.postId}>
+              <Box className="comments-section">
+                <Box className="comments-list">
+                  <AnimatePresence>
+                    {comments[post.postId]?.map((comment) => (
+                      <motion.div
+                        key={comment._id}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        className="comment"
+                      >
+                        <Box className="comment-header">
+                          <Avatar 
+                            alt={comment.authorName} 
+                            src="/default-avatar.png" 
+                            sx={{ width: 24, height: 24 }}
+                          />
+                          <Typography variant="subtitle2">{comment.authorName}</Typography>
+                          <Typography variant="caption" color="textSecondary">
+                            {formatDate(comment.createdAt)}
+                          </Typography>
+                        </Box>
+                        <Typography variant="body2">{comment.content}</Typography>
+                        {comment.userId === userId && (
+                          <IconButton
+                            size="small"
+                            onClick={() => handleDeleteComment(post.postId, comment._id)}
+                            color="error"
+                          >
+                            <Delete fontSize="small" />
+                          </IconButton>
+                        )}
+                      </motion.div>
                     ))}
-                    </div>
-                </div>
-                <div className="content">PostType: {post.postType}</div>
-                <img src={farming} alt="PostImage" className="content-img"/>
-                <div className="actions-container1">
-                    <span>{post.likeCount || 0} Likes</span>
-                    <span>{post.commentCount || 0} Comments</span>
-                    <span>{post.repostCount || 0} Reposts</span>
-                </div>
-                <div className="actions-container2">
-                    <button 
-                        className="action-btn" 
-                        style={{ backgroundColor: post.likeUsers?.includes(localStorage.getItem("userId")) ? 'lightgreen' : 'transparent' }} 
-                        onClick={() => handleLike(post.postId, index)}>
-                        👍 Like
-                    </button>
-                    <button className="action-btn" onClick={() => handleToggleComments(post.postId)}>
-                        💬 Comment
-                    </button>
-                    <button className="action-btn">🔗 Share</button>
-                    <button className="action-btn">🔁 Repost</button>
-                </div>
-                {expandedComments[post.postId] && (
-                    <div className="comments-section">
-                        <input
-                            type="text"
-                            className="comment-input"
+                  </AnimatePresence>
+                </Box>
+                <Box className="comment-input">
+                  <TextField
+                    fullWidth
+                    size="small"
                             placeholder="Write a comment..."
-                            value={commentInputs[post.postId] || ""}
-                            onChange={(e) =>
-                                setCommentInputs((prev) => ({
-                                    ...prev,
-                                    [post.postId]: e.target.value,
-                                }))
-                            }
-                            onKeyDown={(e) => {
-                                if (e.key === "Enter") {
+                    value={comment}
+                    onChange={(e) => setComment(e.target.value)}
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
                                     handleComment(post.postId);
                                 }
                             }}
-                        
-                        />
-                    <div className="comments-list">
-                        {post.comments && post.comments.length > 0 ? (
-                            post.comments.map((comment, idx) => {
-                                const user = userDetailsMap[comment.commentedUserId];
-                                return (
-                                    <div key={idx} className="comment">
-                                        <strong>{user ? user.username : 'Unknown User'}</strong>: {comment.content}
-                                    </div>
-                                );
-                            })
-                        ) : (
-                            <div>No comments yet.</div>
-                        )}
-                    </div>
-                    </div>
-                    )}
-                </div> 
-            );
-            })}
-        </>
-    );
-});
+                  />
+                  <IconButton 
+                    color="primary"
+                    onClick={() => handleComment(post.postId)}
+                    disabled={!comment.trim()}
+                  >
+                    <Send />
+                  </IconButton>
+                </Box>
+              </Box>
+            </Collapse>
+          </Card>
+        </motion.div>
+      ))}
+    </motion.div>
+  );
+}
 
 export default Post;

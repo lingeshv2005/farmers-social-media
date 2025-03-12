@@ -1,13 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { TextField, Button, CircularProgress, IconButton, InputAdornment } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '../styles/Base.css';
-
+import axiosInstance from '../utils/axios';
+import { ENDPOINTS } from '../config/api';
 import GLogin from './GoogleLogin';
 
 function Login() {
@@ -16,6 +16,14 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // If already authenticated, redirect to posts
+    const isAuth = localStorage.getItem('isAuth') === 'true';
+    if (isAuth) {
+      navigate('/posts', { replace: true });
+    }
+  }, [navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -27,26 +35,35 @@ function Login() {
     e.preventDefault();
     setLoading(true);
     try {
-      console.log(formData);
-      // const response = await axios.post('https://farmers-social-media-backend.onrender.com/api/v1/auth/login', 
-      const response = await axios.post('http://localhost:8000/api/v1/auth/login', 
-        { username: formData.username, password: formData.password },
-        { headers: { 'Content-Type': 'application/json' } }
-      );
-            const { token, userId } = response.data;
-      localStorage.setItem('authToken', token);
+      // Remove any existing tokens
+      localStorage.removeItem('token');
+      localStorage.removeItem('userId');
+      localStorage.removeItem('username');
+      localStorage.removeItem('isAuth');
+
+      const response = await axiosInstance.post(ENDPOINTS.LOGIN, {
+        username: formData.username,
+        password: formData.password
+      });
+
+      const { token, userId, name, email, userType } = response.data;
+      
+      // Set authentication data
+      localStorage.setItem('token', token);
       localStorage.setItem('userId', userId);
+      localStorage.setItem('username', name || formData.username);
       localStorage.setItem('isAuth', 'true');
 
+      // Show success message
       toast.success('Login successful!');
-      navigate('/home');
 
-      setTimeout(() => {
-        window.location.reload();
-    }, 100);
-
+      // Navigate to posts page
+      navigate('/posts', { replace: true });
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed. Please try again.');
+      console.error('Login error:', err);
+      const errorMessage = err.response?.data?.message || 'Login failed. Please try again.';
+      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -59,7 +76,14 @@ function Login() {
         <p className="subtitle">Connect with farmers and share experiences</p>
         <form className="form" onSubmit={handleSubmit}>
           {error && <div className="error-message">{error}</div>}
-          <TextField fullWidth label="Username" name="username" value={formData.username} onChange={handleChange} required />
+          <TextField 
+            fullWidth 
+            label="Username" 
+            name="username" 
+            value={formData.username} 
+            onChange={handleChange} 
+            required 
+          />
           <TextField
             fullWidth
             label="Password"
@@ -72,7 +96,7 @@ function Login() {
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton onClick={() => setShowPassword(!showPassword)}>
-                    {showPassword ? <Visibility /> : <VisibilityOff />}  {/* Default closed eye */}
+                    {showPassword ? <Visibility /> : <VisibilityOff />}
                   </IconButton>
                 </InputAdornment>
               ),
@@ -90,7 +114,6 @@ function Login() {
         </form>
         <br />
         <GLogin />
-
         <p className="footer">Don't have an account? <Link to="/signup">Sign up</Link></p>
       </div>
     </motion.div>
