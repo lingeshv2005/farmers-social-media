@@ -10,7 +10,7 @@ export default function ChatApp() {
     const [selectedChat, setSelectedChat] = useState(null);
     const chatBoxRef = useRef(null);
     const socket = useRef(null);
-    const { chatUserId } = useParams();
+    const [chatUserId,setChatUserId] = useState(null);
     const navigate = useNavigate();
     const location = useLocation();
     const userId = localStorage.getItem("userId");
@@ -23,6 +23,7 @@ export default function ChatApp() {
                 const res = await axios.get(`http://localhost:8000/api/v1/userdetails/getuserdetails/${chatUserId}`);
                 const userDetails = res.data;
 
+                // console.log(userDetails);
                 if (!isNewChat) {
                     userDetails.communicationId = existingCommId;
                 }
@@ -74,6 +75,9 @@ export default function ChatApp() {
             axios.get(`http://localhost:8000/api/v1/message/${selectedChat.communicationId}`)
                 .then(response => {
                     setMessages(response.data.messages || []);
+                    setChatUserId(response.data.userId1===userId?response.data.userId2:response.data.userId1);
+                    // console.log(messages);
+                    // console.log("user",response.data);
                 })
                 .catch(error => console.error("Error fetching messages:", error));
         }

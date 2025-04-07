@@ -53,10 +53,24 @@ export default function AllChats() {
             try {
                 const usersData = await Promise.all(
                     communicationIds.map(async (commId) => {
-                        const res = await axios.get(`http://localhost:8000/api/v1/userdetails/getuserdetails/${commId}`);
-                        return { ...res.data, communicationId: commId };
+                        // Step 1: Get communication details
+                        const commRes = await axios.get(`http://localhost:8000/api/v1/message/${commId}`);
+                        const commData = commRes.data;
+                
+                        // Step 2: Determine the other user
+                        const otherUserId = commData.userId1 === userId ? commData.userId2 : commData.userId1;
+                
+                        // Step 3: Get user details
+                        const userRes = await axios.get(`http://localhost:8000/api/v1/userdetails/getuserdetails/${otherUserId}`);
+                
+                        // Step 4: Return formatted object (same format as your original code)
+                        return {
+                            ...userRes.data,
+                            communicationId: commId
+                        };
                     })
                 );
+                console.log(usersData);
                 setChatUsers(usersData);
             } catch (err) {
                 console.error("Error fetching user details:", err);
