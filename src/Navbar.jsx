@@ -39,7 +39,7 @@ const Navbar = () => {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.5 }}
                 >
-                    FarmDoc
+                    Sow & Grow
                 </motion.span>
             </div>
 
@@ -50,8 +50,11 @@ const Navbar = () => {
                     {isAuthenticated ? (
                         <>
                             <li><Link to="/profile-dashboard">Profile</Link></li>
+                            <li><Link to="/ecomHome">Ecommerce </Link></li>
+
                             <li><Link to="/notifications">Notifications</Link></li>
                             <li><Link to="/chat">Chat</Link></li>  {/* ✅ Added Chat Link */}
+                            <li><Link to="/llm">Llm</Link></li>
                             <li>
                                 <motion.button 
                                     className="logout-btn" 
@@ -98,6 +101,7 @@ const Navbar = () => {
                                     <li><Link to="/profile-dashboard">Profile</Link></li>
                                     <li><Link to="/notifications">Notifications</Link></li>
                                     <li><Link to="/chat">Chat</Link></li> {/* ✅ Added Chat Link */}
+                                    <li><Link to="/llm">Llm</Link></li>
                                     <li>
                                         <motion.button 
                                             className="logout-btn" 

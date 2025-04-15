@@ -1,0 +1,189 @@
+/* Modal Styling */
+.modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    padding: 25px;
+    width: 420px;
+    max-height: 90vh; /* Prevents overflow */
+    overflow-y: auto; /* Enables scrolling */
+    border-radius: 10px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Custom Scrollbar for Modal */
+.modal::-webkit-scrollbar {
+    width: 6px;
+}
+
+.modal::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 6px;
+}
+
+.modal::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Modal Header */
+h2 {
+    text-align: center;
+    margin-bottom: 15px;
+    color: #333;
+    font-size: 22px;
+}
+
+/* Form Layout */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Labels */
+label {
+    font-weight: bold;
+    margin: 12px 0 6px;
+    color: #444;
+}
+
+/* Input & Textarea Styling */
+input,
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border 0.3s ease-in-out;
+}
+
+input:focus,
+textarea:focus {
+    border: 1px solid #28a745;
+    outline: none;
+}
+
+/* Textarea Adjustments */
+textarea {
+    resize: vertical;
+    height: 90px;
+}
+
+/* File Upload Styling */
+input[type="file"] {
+    border: none;
+    padding: 8px;
+    font-size: 14px;
+}
+
+/* Image Preview Section */
+.preview-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+    max-height: 150px; /* Prevents overflow */
+    overflow-y: auto; /* Enables scrolling */
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+}
+
+/* Custom Scrollbar for Preview */
+.preview-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.preview-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 6px;
+}
+
+.preview-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.preview-image {
+    width: 65px;
+    height: 65px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid #ddd;
+    transition: transform 0.2s;
+}
+
+.preview-image:hover {
+    transform: scale(1.05);
+    border-color: #28a745;
+}
+
+/* Buttons Container */
+.button-container {
+    display: flex;
+    justify-content: space-between; /* Aligns buttons correctly */
+    margin-top: 15px;
+}
+
+/* Buttons */
+button {
+    flex: 1; /* Ensures equal width */
+    padding: 12px;
+    border: none;
+    cursor: pointer;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background 0.3s;
+    text-align: center;
+}
+
+/* Submit Button */
+button.submit-btn {
+    background: #28a745;
+    color: white;
+    margin-right: 8px; /* Adds space between buttons */
+}
+
+button.submit-btn:hover {
+    background: #218838;
+}
+
+button:disabled {
+    background: #aaa;
+    cursor: not-allowed;
+}
+
+/* Close Button */
+button.close-btn {
+    background: #dc3545;
+    color: white;
+}
+
+button.close-btn:hover {
+    background: #c82333;
+}
+
+/* Error Message */
+.error {
+    color: red;
+    font-size: 14px;
+    margin-bottom: 10px;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Fade-in Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -55%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}

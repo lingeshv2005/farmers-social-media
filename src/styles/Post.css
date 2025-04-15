@@ -1,21 +1,43 @@
-body {
-  padding-top: 80px; /* Adjust according to navbar height */
-}
+
 
 .post {
   width: 100%;
   max-width: 550px;
-  padding: 20px;
-  margin: 20px auto;
+  padding: 22px;
+  margin: 24px auto;
   background: #ffffff;
   border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 15px rgba(73, 115, 45, 0.15);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-top: 4px solid #588157;
+  position: relative;
+  overflow: hidden;
+}
+
+.post::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #3a5a40, #588157, #a3b18a);
+  opacity: 0.8;
+}
+
+.post::after {
+  content: "🌱";
+  position: absolute;
+  bottom: -5px;
+  right: 5px;
+  font-size: 20px;
+  opacity: 0.1;
+  transform: rotate(10deg);
 }
 
 .post:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(73, 115, 45, 0.2);
 }
 
 .header {
@@ -23,6 +45,7 @@ body {
   align-items: center;
   justify-content: space-between;
   margin-bottom: 15px;
+  position: relative;
 }
 
 .profile-logo {
@@ -30,115 +53,665 @@ body {
   height: 50px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #e2e8f0;
+  border: 2px solid #a3b18a;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.profile-logo:hover {
+  transform: scale(1.05);
+  border-color: #588157;
 }
 
 .username-bio-time {
   flex-grow: 1;
-  margin-left: 12px;
+  margin-left: 15px;
 }
 
 .username {
   font-size: 1.1rem;
   font-weight: bold;
-  color: #1a202c;
+  color: #3a5a40;
+  position: relative;
+  display: inline-block;
+}
+
+.username::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #588157;
+  transition: width 0.3s ease;
+}
+
+.username:hover::after {
+  width: 100%;
 }
 
 .bio {
   font-size: 0.9rem;
-  color: #4a5568;
+  color: #588157;
+  margin-top: 2px;
 }
 
 .time {
   font-size: 0.8rem;
-  color: #718096;
+  color: #6c757d;
+  display: flex;
+  align-items: center;
+}
+
+.time::before {
+  content: "🕒";
+  font-size: 0.7rem;
+  margin-right: 3px;
+  opacity: 0.7;
 }
 
 .content {
   font-size: 1rem;
-  line-height: 1.5;
+  line-height: 1.6;
   color: #2d3748;
-  margin: 12px 0;
+  margin: 16px 0;
+  position: relative;
+  padding-left: 10px;
+}
+
+.content::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 5px;
+  bottom: 5px;
+  width: 3px;
+  background-color: #e9f5db;
+  border-radius: 3px;
 }
 
 .content-img {
   width: 100%;
   max-height: 350px;
-  border-radius: 8px;
+  border-radius: 10px;
   object-fit: cover;
+  border: 1px solid #e9f5db;
+  transition: transform 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.content-img:hover {
+  transform: scale(1.01);
 }
 
 .actions-container1 {
   display: flex;
   justify-content: space-between;
-  padding: 10px 0;
-  border-bottom: 1px solid #e2e8f0;
+  padding: 12px 5px;
+  border-bottom: 1px solid #e9f5db;
+  margin-top: 5px;
 }
 
 .actions-container2 {
   display: flex;
   justify-content: space-between;
-  margin-top: 10px;
+  margin-top: 12px;
+  align-items: center;
 }
 
 .action-btn {
   background: none;
   border: none;
   font-size: 0.9rem;
-  font-weight: bold;
-  color: #555;
+  font-weight: 600;
+  color: #588157;
   cursor: pointer;
-  padding: 6px 10px;
-  border-radius: 5px;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  padding: 7px 12px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+}
+
+.action-btn::before {
+  margin-right: 5px;
+  font-size: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.action-btn:nth-of-type(1)::before {
+  content: "👍";
+}
+
+.action-btn:nth-of-type(2)::before {
+  content: "💬";
+}
+
+.action-btn:nth-of-type(3)::before {
+  content: "🔄";
 }
 
 .action-btn:hover {
-  color: #0073b1;
-  background-color: #e2e8f0;
+  color: #3a5a40;
+  background-color: #e9f5db;
+}
+
+.action-btn:hover::before {
+  transform: scale(1.2);
 }
 
 .follow-btn {
-  background-color: #3182ce;
+  background: linear-gradient(90deg, #3a5a40, #588157);
   color: white;
-  padding: 6px 12px;
+  padding: 8px 14px;
   border: none;
-  border-radius: 5px;
+  border-radius: 6px;
   cursor: pointer;
   font-size: 0.9rem;
-  transition: background-color 0.3s ease;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(58, 90, 64, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.follow-btn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s ease;
 }
 
 .follow-btn:hover {
-  background-color: #2b6cb0;
+  background: linear-gradient(90deg, #344e41, #3a5a40);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(58, 90, 64, 0.3);
+}
+
+.follow-btn:hover::after {
+  left: 100%;
 }
 
 .comment-input {
   width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  margin-top: 10px;
-  font-size: 0.9rem;
+  padding: 10px 12px;
+  border: 1px solid #a3b18a;
+  border-radius: 8px;
+  margin-top: 12px;
+  font-size: 0.95rem;
+  background-color: #fcfcfc;
+  transition: all 0.3s ease;
+}
+
+.comment-input:focus {
+  outline: none;
+  border-color: #588157;
+  box-shadow: 0 0 0 3px rgba(88, 129, 87, 0.1);
+  background-color: #fff;
+}
+
+.comment-input::placeholder {
+  color: #a3b18a;
 }
 
 .comments-list {
-  margin-top: 10px;
-  padding-left: 10px;
+  margin-top: 15px;
+  padding-left: 5px;
 }
 
 .comment {
-  padding: 8px;
-  border-radius: 5px;
-  background: #f1f1f1;
-  margin-bottom: 8px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #f7f9f4;
+  margin-bottom: 10px;
   font-size: 14px;
+  border-left: 3px solid #a3b18a;
+  transition: all 0.3s ease;
 }
 
 .comment:hover {
-  background: #e0e0e0;
+  background: #edf2e7;
+  border-left-color: #588157;
+  transform: translateX(3px);
 }
 
 .comment strong {
-  color: #4CAF50;
+  color: #3a5a40;
+  font-weight: 600;
+}
+
+/* Loading state for posts */
+.post.loading {
+  position: relative;
+  min-height: 200px;
+}
+
+.post.loading::before {
+  content: "🌾";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 24px;
+  animation: growShrink 1.5s infinite alternate;
+}
+
+@keyframes growShrink {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.2);
+    opacity: 1;
+  }
+}
+
+/* Empty state for no posts */
+.no-posts {
+  text-align: center;
+  padding: 40px 20px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(73, 115, 45, 0.15);
+  margin: 24px auto;
+  max-width: 550px;
+}
+
+.no-posts::before {
+  content: "🌱";
+  font-size: 40px;
+  display: block;
+  margin-bottom: 15px;
+}
+
+.no-posts h3 {
+  color: #3a5a40;
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.no-posts p {
+  color: #588157;
+}
+
+/* Add this for handling null posts state */
+.posts-container:empty::after {
+  content: "Loading posts...";
+  text-align: center;
+  padding: 30px;
+  display: block;
+  color: #588157;
+  font-style: italic;
+}
+body {
+  padding-top: 80px; /* Adjust according to navbar height */
+  background-color: #f3f7ee;
+  background-image: url("data:image/svg+xml,%3Csvg width='52' height='26' viewBox='0 0 52 26' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23a3b18a' fill-opacity='0.15'%3E%3Cpath d='M10 10c0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6h2c0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4v2c-3.314 0-6-2.686-6-6 0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6zm25.464-1.95l8.486 8.486-1.414 1.414-8.486-8.486 1.414-1.414z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  font-family: "Poppins", sans-serif;
+}
+
+.post {
+  width: 100%;
+  max-width: 550px;
+  padding: 22px;
+  margin: 24px auto;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(73, 115, 45, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-top: 4px solid #588157;
+  position: relative;
+  overflow: hidden;
+}
+
+.post::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #3a5a40, #588157, #a3b18a);
+  opacity: 0.8;
+}
+
+.post::after {
+  content: "🌱";
+  position: absolute;
+  bottom: -5px;
+  right: 5px;
+  font-size: 20px;
+  opacity: 0.1;
+  transform: rotate(10deg);
+}
+
+.post:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(73, 115, 45, 0.2);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  position: relative;
+}
+
+.profile-logo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #a3b18a;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.profile-logo:hover {
+  transform: scale(1.05);
+  border-color: #588157;
+}
+
+.username-bio-time {
+  flex-grow: 1;
+  margin-left: 15px;
+}
+
+.username {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #3a5a40;
+  position: relative;
+  display: inline-block;
+}
+
+.username::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #588157;
+  transition: width 0.3s ease;
+}
+
+.username:hover::after {
+  width: 100%;
+}
+
+.bio {
+  font-size: 0.9rem;
+  color: #588157;
+  margin-top: 2px;
+}
+
+.time {
+  font-size: 0.8rem;
+  color: #6c757d;
+  display: flex;
+  align-items: center;
+}
+
+.time::before {
+  content: "🕒";
+  font-size: 0.7rem;
+  margin-right: 3px;
+  opacity: 0.7;
+}
+
+.content {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #2d3748;
+  margin: 16px 0;
+  position: relative;
+  padding-left: 10px;
+}
+
+.content::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 5px;
+  bottom: 5px;
+  width: 3px;
+  background-color: #e9f5db;
+  border-radius: 3px;
+}
+
+.content-img {
+  width: 100%;
+  max-height: 350px;
+  border-radius: 10px;
+  object-fit: cover;
+  border: 1px solid #e9f5db;
+  transition: transform 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.content-img:hover {
+  transform: scale(1.01);
+}
+
+.actions-container1 {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 5px;
+  border-bottom: 1px solid #e9f5db;
+  margin-top: 5px;
+}
+
+.actions-container2 {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12px;
+  align-items: center;
+}
+
+.action-btn {
+  background: none;
+  border: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #588157;
+  cursor: pointer;
+  padding: 7px 12px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+}
+
+.action-btn::before {
+  margin-right: 5px;
+  font-size: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.action-btn:nth-of-type(1)::before {
+  content: "👍";
+}
+
+.action-btn:nth-of-type(2)::before {
+  content: "💬";
+}
+
+.action-btn:nth-of-type(3)::before {
+  content: "🔄";
+}
+
+.action-btn:hover {
+  color: #3a5a40;
+  background-color: #e9f5db;
+}
+
+.action-btn:hover::before {
+  transform: scale(1.2);
+}
+
+.follow-btn {
+  background: linear-gradient(90deg, #3a5a40, #588157);
+  color: white;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(58, 90, 64, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.follow-btn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.follow-btn:hover {
+  background: linear-gradient(90deg, #344e41, #3a5a40);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(58, 90, 64, 0.3);
+}
+
+.follow-btn:hover::after {
+  left: 100%;
+}
+
+.comment-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #a3b18a;
+  border-radius: 8px;
+  margin-top: 12px;
+  font-size: 0.95rem;
+  background-color: #fcfcfc;
+  transition: all 0.3s ease;
+}
+
+.comment-input:focus {
+  outline: none;
+  border-color: #588157;
+  box-shadow: 0 0 0 3px rgba(88, 129, 87, 0.1);
+  background-color: #fff;
+}
+
+.comment-input::placeholder {
+  color: #a3b18a;
+}
+
+.comments-list {
+  margin-top: 15px;
+  padding-left: 5px;
+}
+
+.comment {
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #f7f9f4;
+  margin-bottom: 10px;
+  font-size: 14px;
+  border-left: 3px solid #a3b18a;
+  transition: all 0.3s ease;
+}
+
+.comment:hover {
+  background: #edf2e7;
+  border-left-color: #588157;
+  transform: translateX(3px);
+}
+
+.comment strong {
+  color: #3a5a40;
+  font-weight: 600;
+}
+
+/* Loading state for posts */
+.post.loading {
+  position: relative;
+  min-height: 200px;
+}
+
+.post.loading::before {
+  content: "🌾";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 24px;
+  animation: growShrink 1.5s infinite alternate;
+}
+
+@keyframes growShrink {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.2);
+    opacity: 1;
+  }
+}
+
+/* Empty state for no posts */
+.no-posts {
+  text-align: center;
+  padding: 40px 20px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(73, 115, 45, 0.15);
+  margin: 24px auto;
+  max-width: 550px;
+}
+
+.no-posts::before {
+  content: "🌱";
+  font-size: 40px;
+  display: block;
+  margin-bottom: 15px;
+}
+
+.no-posts h3 {
+  color: #3a5a40;
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.no-posts p {
+  color: #588157;
+}
+
+/* Add this for handling null posts state */
+.posts-container:empty::after {
+  content: "Loading posts...";
+  text-align: center;
+  padding: 30px;
+  display: block;
+  color: #588157;
+  font-style: italic;
 }

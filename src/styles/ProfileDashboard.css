@@ -1,39 +1,43 @@
 .profile-dashboard {
   width: 90%;
   max-width: 800px;
-  background-color: #ffffff;
+  background-color: #f8f7f2; /* Earthy tone background */
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 10px rgba(76, 125, 42, 0.2); /* Green-tinted shadow */
   margin: 20px auto;
   padding-bottom: 20px;
+  border: 2px solid #8ab060; /* Light green border */
 }
 
 .profile-background {
   width: 100%;
   height: 200px;
   object-fit: cover;
+  border-bottom: 4px solid #6a994e; /* Olive green border */
 }
 
 .profile-picture {
   width: 120px;
   height: 120px;
   border-radius: 50%;
-  border: 4px solid #ffffff;
+  border: 4px solid #dde5b6; /* Light wheat color */
   object-fit: cover;
   position: relative;
   top: -60px;
+  box-shadow: 0 2px 8px rgba(76, 125, 42, 0.3);
 }
 
 .profile-dashboard h1 {
   margin: 0 0 5px 30px;
   font-size: 2rem;
-  color: #333;
+  color: #386641; /* Deep forest green */
+  font-family: "Georgia", serif; /* More rustic font */
 }
 
 .profile-dashboard p {
   margin: 5px 0 5px 30px;
-  color: #555;
+  color: #606c38; /* Dark olive */
   font-size: 1rem;
   line-height: 1.5;
 }
@@ -43,9 +47,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 20px;
-  height: 20px;
-  background-color: #0095f6; 
+  width: 22px;
+  height: 22px;
+  background-color: #588157; /* Green verified badge */
   border-radius: 50%;
   color: white;
   font-size: 12px;
@@ -54,8 +58,8 @@
 
 .profile-header {
   display: flex;
-  align-items: center; 
-  gap: 10px; /* Space between username and edit icon */
+  align-items: center;
+  gap: 10px;
   margin: 0 30px;
 }
 
@@ -64,12 +68,12 @@
   border: none;
   font-size: 1.2rem;
   cursor: pointer;
-  color: #0073b1;
+  color: #588157; /* Green edit button */
   transition: color 0.3s ease;
 }
 
 .edit-btn:hover {
-  color: #005582;
+  color: #386641;
 }
 
 /* Recent Activity Header Container */
@@ -78,16 +82,18 @@
   justify-content: space-between;
   align-items: center;
   font-size: 1.5rem;
-  color: #333;
+  color: #386641;
   margin-bottom: 15px;
   padding: 0 20px;
+  border-bottom: 2px dashed #a7c957; /* Dashed light green border */
+  padding-bottom: 10px;
 }
 
 /* Add Post Button - Positioned to the right of Recent Activity */
 .add-post-btn {
   width: 45px;
   height: 45px;
-  background-color: #4CAF50;
+  background-color: #6a994e; /* Green button */
   color: white;
   font-size: 1.5rem;
   font-weight: bold;
@@ -98,10 +104,11 @@
   justify-content: center;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  box-shadow: 0 2px 5px rgba(106, 153, 78, 0.4);
 }
 
 .add-post-btn:hover {
-  background-color: #45a049;
+  background-color: #386641; /* Darker green on hover */
 }
 
 .add-post-btn:focus {
@@ -110,22 +117,32 @@
 
 .activity-container {
   padding: 20px;
-  background-color: #f9f9f9;
-  border-top: 1px solid #ddd;
+  background-color: #f2f4e8; /* Light wheat background */
+  border-top: 1px solid #ccd5ae;
+  border-radius: 0 0 12px 12px;
 }
 
 .activity-container h2 {
   font-size: 1.5rem;
-  color: #333;
+  color: #386641;
   margin-bottom: 15px;
   text-align: center;
+  font-family: "Georgia", serif;
+}
+
+.post {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+  border-left: 4px solid #a7c957; /* Green accent border */
 }
 
 .content {
   margin-top: 15px;
   font-size: 1rem;
   line-height: 1.6;
-  color: #444;
+  color: #606c38;
   text-align: left;
 }
 
@@ -136,6 +153,7 @@
   object-fit: cover;
   border-radius: 8px;
   margin: 15px 0;
+  border: 1px solid #dde5b6; /* Light border */
 }
 
 .carousel-buttons {
@@ -149,7 +167,7 @@
 
 button.prev-btn,
 button.next-btn {
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(88, 129, 87, 0.8); /* Semi-transparent green */
   color: white;
   border: none;
   border-radius: 50%;
@@ -161,17 +179,18 @@ button.next-btn {
 
 button.prev-btn:hover,
 button.next-btn:hover {
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(56, 102, 65, 0.9); /* Darker green on hover */
   transform: scale(1.1);
 }
 
+/* Dialog styles */
 .dialog-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(56, 102, 65, 0.4); /* Green-tinted overlay */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -179,23 +198,60 @@ button.next-btn:hover {
 }
 
 .dialog-box {
-  background: white;
+  background: #f8f7f2; /* Earthy background */
   padding: 20px;
-  width: 600px; /* Increased width */
+  width: 600px;
   max-width: 95%;
-  max-height: 80vh; /* Decreased height */
-  overflow-y: auto; /* Added scroll */
+  max-height: 80vh;
+  overflow-y: auto;
   border-radius: 10px;
   position: relative;
+  border: 2px solid #a7c957;
+  box-shadow: 0 5px 15px rgba(106, 153, 78, 0.3);
 }
 
 .close-btn {
   position: absolute;
   top: 10px;
   right: 10px;
-  background: red;
+  background: #bc4749; /* Barn red color */
   color: white;
   border: none;
   padding: 5px 10px;
   cursor: pointer;
+  border-radius: 4px;
+}
+
+/* Social links */
+.social-links {
+  background-color: #f2f4e8;
+  border-radius: 8px;
+  padding: 10px 20px;
+  margin: 15px 30px;
+  border: 1px dashed #a7c957;
+}
+
+.social-links p {
+  margin: 8px 0;
+  color: #606c38;
+}
+
+/* Loading and error states */
+.loading,
+.error {
+  text-align: center;
+  padding: 40px;
+  color: #386641;
+  font-size: 1.2rem;
+  background-color: #f2f4e8;
+  border-radius: 8px;
+  margin: 20px auto;
+  width: 80%;
+  max-width: 600px;
+  border: 1px dashed #a7c957;
+}
+
+.error {
+  color: #bc4749; /* Barn red for errors */
+  border-color: #bc4749;
 }

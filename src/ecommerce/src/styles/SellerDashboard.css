@@ -1,0 +1,83 @@
+
+.container {
+  max-width: 900px;
+  width: 100%;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.seller-dashboard {
+  max-width: 800px;
+  width: 100%;
+  padding: 20px;
+  background: rgb(130, 240, 130);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.seller-dashboard h2 {
+  color: #4caf50;
+  margin-bottom: 20px;
+}
+
+.seller-info {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.seller-info p {
+  margin: 10px 0;
+}
+
+.status {
+  font-weight: bold;
+}
+
+.status.pending {
+  color: orange;
+}
+
+.status.approved {
+  color: green;
+}
+
+.status.rejected {
+  color: red;
+}
+
+.shop-images {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.shop-images img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.seller-dashboard .documents {
+  margin-top: 20px;
+}
+
+.seller-dashboard .documents a {
+  display: block;
+  margin: 5px 0;
+  text-decoration: none;
+  color: #007bff;
+}
+
+.products-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+}

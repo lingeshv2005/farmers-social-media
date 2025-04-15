@@ -1,0 +1,97 @@
+.seller-register {
+  max-width: 500px;
+  margin: 50px auto;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.seller-register h2 {
+  text-align: center;
+  color: #333;
+}
+
+.seller-register form {
+  display: flex;
+  flex-direction: column;
+}
+
+.seller-register label {
+  font-weight: bold;
+  margin-top: 10px;
+  color: #555;
+}
+
+.seller-register input,
+.seller-register textarea {
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.seller-register textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.seller-register input[type="file"] {
+  border: none;
+  padding: 5px;
+}
+
+.seller-register .preview-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.seller-register .preview-image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+.seller-register .preview-doc {
+  display: block;
+  color: #007bff;
+  text-decoration: none;
+  margin-top: 5px;
+}
+
+.seller-register .preview-doc:hover {
+  text-decoration: underline;
+}
+
+.seller-register button {
+  margin-top: 15px;
+  padding: 12px;
+  background-color: #28a745;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.seller-register button:hover {
+  background-color: #218838;
+}
+
+.seller-register button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.error {
+  color: red;
+  text-align: center;
+  margin-bottom: 10px;
+}
