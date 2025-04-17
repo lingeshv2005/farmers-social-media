@@ -49,12 +49,13 @@ const Navbar = () => {
                     <li><Link to="/home">Home</Link></li>
                     {isAuthenticated ? (
                         <>
-                            <li><Link to="/profile-dashboard">Profile</Link></li>
                             <li><Link to="/ecomHome">Ecommerce </Link></li>
 
-                            <li><Link to="/notifications">Notifications</Link></li>
+                            {/* <li><Link to="/notifications">Notifications</Link></li> */}
                             <li><Link to="/chat">Chat</Link></li>  {/* ✅ Added Chat Link */}
                             <li><Link to="/llm">Llm</Link></li>
+                            <li><Link to="/profile-dashboard">Profile</Link></li>
+
                             <li>
                                 <motion.button 
                                     className="logout-btn" 

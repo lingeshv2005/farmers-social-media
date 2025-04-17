@@ -10,100 +10,108 @@ export default function ChatApp() {
     const [selectedChat, setSelectedChat] = useState(null);
     const chatBoxRef = useRef(null);
     const socket = useRef(null);
-    const [chatUserId,setChatUserId] = useState(null);
+    const [chatUserId, setChatUserId] = useState(null);
     const navigate = useNavigate();
     const location = useLocation();
+    const { communicationId, chatUserId: paramChatUserId } = useParams();
     const userId = localStorage.getItem("userId");
 
-    const { isNewChat, communicationId: existingCommId } = location.state || {};
+    const { isNewChat } = location.state || {};
 
+    // Fetch chat user and messages (using getMessagesIfExists API if needed)
     useEffect(() => {
-        const fetchChatUserDetails = async () => {
+        const fetchChatDetails = async () => {
             try {
-                const res = await axios.get(`http://localhost:8000/api/v1/userdetails/getuserdetails/${chatUserId}`);
-                const userDetails = res.data;
+                if (communicationId) {
+                    const res = await axios.get(
+                        `http://localhost:8000/api/v1/message/getChatUserByCommunicationId/${communicationId}`
+                    );
+                    const userDetails = res.data;
+                    const otherUserId = userDetails.userId1 === userId ? userDetails.userId2 : userDetails.userId1;
+                    setChatUserId(otherUserId);
+                    setSelectedChat(userDetails);
+                    console.log("Selected chat userDetails:", userDetails); // Log here
 
-                // console.log(userDetails);
-                if (!isNewChat) {
-                    userDetails.communicationId = existingCommId;
+                    const messagesRes = await axios.get(`http://localhost:8000/api/v1/message/${communicationId}`);
+                    setMessages(messagesRes.data.messages || []);
+                } else if (paramChatUserId) {
+                    setChatUserId(paramChatUserId);
+                    const res = await axios.get(
+                        `http://localhost:8000/api/v1/message/getMessagesIfExists/${userId}/${paramChatUserId}`
+                    );
+
+                    if (res.data.communicationId) {
+                        setSelectedChat({
+                            communicationId: res.data.communicationId,
+                            userId1: userId,
+                            userId2: paramChatUserId,
+                        });
+                        setMessages(res.data.messages || []);
+                    } else {
+                        // No previous chat, fetch basic user details for UI
+                        const userRes = await axios.get(
+                            `http://localhost:8000/api/v1/userdetails/getuserdetails/${paramChatUserId}`
+                        );
+                        setSelectedChat(userRes.data);
+                        console.log("Fetched user details:", userRes.data); // Log here
+                        setMessages([]);
+                    }
                 }
-
-                setSelectedChat(userDetails);
             } catch (err) {
-                console.error("Error fetching chat user details:", err);
+                console.error("Error fetching chat user or messages:", err);
             }
         };
 
-        fetchChatUserDetails();
-    }, [chatUserId, isNewChat, existingCommId]);
+        fetchChatDetails();
+    }, [communicationId, paramChatUserId, userId]);
 
+    // Socket setup
     useEffect(() => {
         if (!socket.current) {
             socket.current = io("http://localhost:8000");
-    
+
             socket.current.on("receiveMessage", (msg) => {
                 console.log("📩 New message received:", msg);
-    
-                setMessages((prevMessages) => {
-                    if (msg.communicationId === selectedChat?.communicationId) {
-                        return [...prevMessages, msg];
-                    }
-                    return prevMessages;
-                });
-    
+                if (msg.communicationId === selectedChat?.communicationId) {
+                    setMessages((prevMessages) => [...prevMessages, msg]);
+                }
                 setTimeout(() => {
                     if (chatBoxRef.current) {
                         chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
                     }
-                }, 100); // ✅ Small delay to ensure message is rendered before scrolling
+                }, 100);
             });
-    
-            return () => {
-                socket.current.disconnect();
-            };
+
+            return () => socket.current.disconnect();
         }
-    }, [selectedChat]); // ✅ Ensures listener updates when chat changes
-    
+    }, [selectedChat]);
+
+    // Auto-scroll
     useEffect(() => {
         if (chatBoxRef.current) {
             chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
         }
-    }, [messages]); // ✅ Triggers auto-scroll when messages update
-    
-    useEffect(() => {
-        if (selectedChat?.communicationId) {
-            axios.get(`http://localhost:8000/api/v1/message/${selectedChat.communicationId}`)
-                .then(response => {
-                    setMessages(response.data.messages || []);
-                    setChatUserId(response.data.userId1===userId?response.data.userId2:response.data.userId1);
-                    // console.log(messages);
-                    // console.log("user",response.data);
-                })
-                .catch(error => console.error("Error fetching messages:", error));
-        }
-    }, [selectedChat]);
+    }, [messages]);
 
+    // Send a message
     const sendMessage = async () => {
         if (!newMessage.trim()) return;
-    
+
         try {
             let commId = selectedChat?.communicationId;
-    
-            if (isNewChat && !commId) {
+
+            if (isNewChat && !commId && chatUserId) {
                 const response = await axios.get(
                     `http://localhost:8000/api/v1/message/getOrCreateCommunicationId/${userId}/${chatUserId}`
                 );
                 commId = response.data.communicationId;
-    
-                console.log("New communicationId:", commId);
-    
-                // Update userDetails with the communicationId
-                const response1=await axios.put(`http://localhost:8000/api/v1/userdetails/addcommunicationid/${userId}`, {
-                    communicationId: commId
-                });
-    
-                console.log(response1);
-                setSelectedChat(prev => ({ ...prev, communicationId: commId }));
+
+                await axios.put(
+                    `http://localhost:8000/api/v1/userdetails/addcommunicationid/${userId}`,
+                    { communicationId: commId }
+                );
+
+                setSelectedChat((prev) => ({ ...prev, communicationId: commId }));
             }
 
             const newMsg = {
@@ -114,37 +122,50 @@ export default function ChatApp() {
                 messageType: "text",
                 communicationId: commId,
             };
-    
-            setMessages((prevMessages) => [...prevMessages, newMsg]); // ✅ Instant UI update before API call
-    
+
+            setMessages((prevMessages) => [...prevMessages, newMsg]); // Optimistic UI update
+
+            // API call to send message
             const response = await axios.post("http://localhost:8000/api/v1/message/create", newMsg);
-    
-            if (socket.current?.connected) {
-                socket.current.emit("sendMessage", response.data.chat.messages.slice(-1)[0]);
-            }
-    
-            setNewMessage("");
+            setNewMessage(""); // Clear input field after sending
         } catch (error) {
-            console.error("🚨 Error sending message:", error.response?.data || error.message);
+            console.error("🚨 Error sending message:", error);
+            // Optionally, handle reverting optimistic UI changes if needed
         }
     };
-        
+
     return (
         <div className="chat-container">
             <div className="chat-header">
                 <button onClick={() => navigate("/chat")}>⬅</button>
-                <img src={selectedChat?.profilePic || "./src/assets/default-profile.png"} alt="Profile" className="profile-pic" />
-                <span className="username">{selectedChat?.username}</span>
+                <img
+                    src={selectedChat?.profilePic || "./src/assets/default-profile.png"}
+                    alt="Profile"
+                    className="profile-pic"
+                />
+                <span className="username">
+                    {selectedChat?.username || "Loading..."} {/* Fix for username display */}
+                </span>
             </div>
+
             <div className="chat-box" ref={chatBoxRef}>
                 {messages.map((msg, index) => (
-                    <div key={index} className={`message ${msg.messagedUserId === userId ? "user-message" : "other-message"}`}>
+                    <div
+                        key={index}
+                        className={`message ${msg.messagedUserId === userId ? "user-message" : "other-message"}`}
+                    >
                         {msg.content}
                     </div>
                 ))}
             </div>
+
             <div className="input-area">
-                <input type="text" value={newMessage} onChange={(e) => setNewMessage(e.target.value)} onKeyDown={(e) => e.key === "Enter" && sendMessage()} />
+                <input
+                    type="text"
+                    value={newMessage}
+                    onChange={(e) => setNewMessage(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+                />
                 <button onClick={sendMessage}>Send</button>
             </div>
         </div>

@@ -21,6 +21,7 @@ import CategoryProducts from "./ecommerce/src/components/CategoryProduct";
 import PaymentSuccess from "./ecommerce/src/components/PaymentSucess";
 import EcomHome from "./ecommerce/src/components/EcomHome";
 import Llm from "./components/Llm";
+import ChannelPage from "./components/ChannelPage";
 
 const CLIENT_ID = "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";
 
@@ -37,9 +38,8 @@ function App() {
           <Route path="/profile-dashboard" element={<ProfileDashboard />} />
           <Route path="/chat" element={<AllChats />} />
           <Route path="/chat/:chatUserId" element={<ChatApp />} />
-          <Route path="/group-chat/:communicationId" element={<GroupChat />} />
-          {/* <Route path="/ecommerce" element={<Appp/>}/> */}
-          <Route path="/ecomHome" element={<EcomHome />} />
+          <Route path="/group/:communicationId" element={<GroupChat />} />
+              <Route path="/ecomHome" element={<EcomHome />} />
               <Route path="/seller-dashboard" element={<SellerDashboard />} />
               <Route path="/seller/register" element={<SellerRegister />} />
               <Route path="/admin-dashboard" element={<AdminDashboard />} />
@@ -51,6 +51,7 @@ function App() {
               <Route path="/category/:category" element={<CategoryProducts />} />
               <Route path="/paymentsuccess" element={<PaymentSuccess />} />
           <Route path="/llm" element={<Llm/>}/>
+          <Route path="/channel/:communicationId" element={<ChannelPage />} />
         </Routes>
       </Router>
     </GoogleOAuthProvider>

@@ -48,6 +48,7 @@ const EcomHome = () => {
 
   return (
     <div className="ecom-container">
+      
       <header className="hero-section">
         <h1>Farmers E-Commerce</h1>
         <p>Buy fresh farm products directly from farmers!</p>

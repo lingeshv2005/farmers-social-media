@@ -1,0 +1,155 @@
+/* ChannelChat.css */
+
+.channel-chat-container {
+    width: 95%;
+    max-width: 500px;
+    height: 90vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin: auto;
+  }
+  
+  /* Channel Header */
+  .channel-chat-header {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    background-color: #4caf50;
+    color: #fff;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+  }
+  
+  .channel-chat-header  {
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+  }
+  
+  .channel-name {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-left: 12px;
+  }
+  
+  /* Chat Box */
+  .channel-chat-box {
+    flex-grow: 1;
+    padding: 12px;
+    overflow-y: auto;
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Messages */
+  .channel-message {
+    max-width: 75%;
+    padding: 10px 14px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+    word-wrap: break-word;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  }
+  
+  .user-message {
+    background-color: #4caf50;
+    color: white;
+    margin-left: auto;
+    border-radius: 12px 12px 0 12px;
+  }
+  
+  .other-message {
+    background-color: #e6f4ea;
+    color: #2c662d;
+    border-radius: 12px 12px 12px 0;
+  }
+  
+  /* Input Area */
+  .channel-input-area {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    background-color: #4c9c53;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-top: 1px solid #1e3f1f;
+  }
+  
+  /* Input Box */
+  .channel-input-area  {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    border-radius: 25px;
+    border: 1px solid #113512;
+    outline: none;
+    background-color: #e6f4ea;
+    color: #2c662d;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+  }
+  
+  .channel-input-area  {
+    border-color: #18411a;
+    background-color: #c1e6c9;
+  }
+  
+  /* Send Button */
+  .channel-input-area  {
+    background-color: #183f19;
+    color: white;
+    padding: 12px 14px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: background-color 0.3s ease;
+    margin-left: 8px;
+  }
+  
+  .channel-input-area  {
+    background-color: #27552a;
+  }
+  
+  /* Responsive */
+  @media (max-width: 480px) {
+    .channel-chat-container {
+      width: 100%;
+      height: 100vh;
+      border-radius: 0;
+      box-shadow: none;
+    }
+  
+    .channel-chat-header {
+      padding: 10px;
+    }
+  
+    .channel-name {
+      font-size: 1rem;
+    }
+  
+    .channel-chat-box {
+      padding: 10px;
+    }
+  
+    .channel-input-area {
+      padding: 8px;
+    }
+  
+    .channel-input-area  {
+      font-size: 0.9rem;
+    }
+  
+    .channel-input-area  {
+      padding: 10px;
+      font-size: 1rem;
+    }
+  }
+  
