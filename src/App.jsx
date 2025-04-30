@@ -22,6 +22,7 @@ import PaymentSuccess from "./ecommerce/src/components/PaymentSucess";
 import EcomHome from "./ecommerce/src/components/EcomHome";
 import Llm from "./components/Llm";
 import ChannelPage from "./components/ChannelPage";
+import LeafLet from "./components/LeafLet";
 
 const CLIENT_ID = "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";
 
@@ -52,6 +53,7 @@ function App() {
               <Route path="/paymentsuccess" element={<PaymentSuccess />} />
           <Route path="/llm" element={<Llm/>}/>
           <Route path="/channel/:communicationId" element={<ChannelPage />} />
+          <Route path="/map" element={<LeafLet />} />
         </Routes>
       </Router>
     </GoogleOAuthProvider>

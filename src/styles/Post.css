@@ -26,7 +26,6 @@
 }
 
 .post::after {
-  content: "🌱";
   position: absolute;
   bottom: -5px;
   right: 5px;
@@ -105,7 +104,6 @@
 }
 
 .time::before {
-  content: "🕒";
   font-size: 0.7rem;
   margin-right: 3px;
   opacity: 0.7;
@@ -180,17 +178,6 @@
   transition: transform 0.3s ease;
 }
 
-.action-btn:nth-of-type(1)::before {
-  content: "👍";
-}
-
-.action-btn:nth-of-type(2)::before {
-  content: "💬";
-}
-
-.action-btn:nth-of-type(3)::before {
-  content: "🔄";
-}
 
 .action-btn:hover {
   color: #3a5a40;
@@ -329,7 +316,6 @@
 }
 
 .no-posts::before {
-  content: "🌱";
   font-size: 40px;
   display: block;
   margin-bottom: 15px;
@@ -387,7 +373,6 @@ body {
 }
 
 .post::after {
-  content: "🌱";
   position: absolute;
   bottom: -5px;
   right: 5px;
@@ -466,7 +451,6 @@ body {
 }
 
 .time::before {
-  content: "🕒";
   font-size: 0.7rem;
   margin-right: 3px;
   opacity: 0.7;
@@ -541,17 +525,6 @@ body {
   transition: transform 0.3s ease;
 }
 
-.action-btn:nth-of-type(1)::before {
-  content: "👍";
-}
-
-.action-btn:nth-of-type(2)::before {
-  content: "💬";
-}
-
-.action-btn:nth-of-type(3)::before {
-  content: "🔄";
-}
 
 .action-btn:hover {
   color: #3a5a40;
@@ -658,7 +631,6 @@ body {
 }
 
 .post.loading::before {
-  content: "🌾";
   position: absolute;
   top: 50%;
   left: 50%;
@@ -690,7 +662,6 @@ body {
 }
 
 .no-posts::before {
-  content: "🌱";
   font-size: 40px;
   display: block;
   margin-bottom: 15px;

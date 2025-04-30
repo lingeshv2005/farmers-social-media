@@ -235,7 +235,7 @@ export default function AllChats() {
                                             onClick={() => navigate(`/chat/${user.userId}`, { state: { isNewChat: false, communicationId: user.communicationId } })}
                                         >
                                             <img 
-                                                src={user.profilePic || "./src/assets/default-profile.png"} 
+                                                src={user.profilePic || "./src/assets/person.jpeg"} 
                                                 alt="Profile" 
                                                 className="profile-pic" 
                                             />
@@ -254,7 +254,7 @@ export default function AllChats() {
                                             className="chat-item group-chat" 
                                             onClick={() => navigate(`/group/${group.communicationId}`)}
                                         >
-                                            <img src={"./src/assets/group-icon.png"} alt="Group" className="profile-pic" />
+                                            <img src={"./src/assets/group.png"} alt="Group" className="profile-pic" />
                                             <span>{group.groupName || "Unnamed Group"}</span>
                                         </div>
                                     ))}
@@ -271,7 +271,7 @@ export default function AllChats() {
                                             onClick={() => navigate(`/channel/${channel.communicationId}`)}
                                         >
                                             <img 
-                                                src={"./src/assets/channel-icon.png"} // or use channel.channelProfilePic if you add that in schema
+                                                src={"./src/assets/group.png"} // or use channel.channelProfilePic if you add that in schema
                                                 alt="Channel" 
                                                 className="profile-pic" 
                                             />

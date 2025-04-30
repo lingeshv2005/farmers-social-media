@@ -25,7 +25,6 @@
 }
 
 .nav-left::after {
-  content: "🌱";
   position: absolute;
   right: -20px;
   bottom: -2px;
